@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Connectivity Analyses - Technical stuff</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a>
+  <ul class="collapse">
+  <li><a href="#read-in-manually-collected-startend-pages" id="toc-read-in-manually-collected-startend-pages" class="nav-link" data-scroll-target="#read-in-manually-collected-startend-pages">Read in manually collected start/end pages</a></li>
+  <li><a href="#update-pdfs-if-not-all-are-downloaded-yet" id="toc-update-pdfs-if-not-all-are-downloaded-yet" class="nav-link" data-scroll-target="#update-pdfs-if-not-all-are-downloaded-yet">Update pdfs if not all are downloaded yet</a></li>
+  <li><a href="#extract-text-from-pdfs-if-not-done-so-yet" id="toc-extract-text-from-pdfs-if-not-done-so-yet" class="nav-link" data-scroll-target="#extract-text-from-pdfs-if-not-done-so-yet">Extract text from pdfs if not done so yet</a></li>
+  <li><a href="#clean-text-if-not-done-so-yet" id="toc-clean-text-if-not-done-so-yet" class="nav-link" data-scroll-target="#clean-text-if-not-done-so-yet">Clean text if not done so yet</a></li>
+  <li><a href="#merge-other-data-to-documents" id="toc-merge-other-data-to-documents" class="nav-link" data-scroll-target="#merge-other-data-to-documents">Merge other data to documents</a></li>
+  <li><a href="#merge-manually-coded-section-data" id="toc-merge-manually-coded-section-data" class="nav-link" data-scroll-target="#merge-manually-coded-section-data">Merge manually coded section data</a></li>
+  </ul></li>
+  <li><a href="#sec-doc-sample" id="toc-sec-doc-sample" class="nav-link" data-scroll-target="#sec-doc-sample">Document sample selection</a></li>
+  <li><a href="#keyword-search" id="toc-keyword-search" class="nav-link" data-scroll-target="#keyword-search">Keyword search</a></li>
+  <li><a href="#analyses" id="toc-analyses" class="nav-link" data-scroll-target="#analyses">Analyses</a>
+  <ul class="collapse">
+  <li><a href="#sample-and-method" id="toc-sample-and-method" class="nav-link" data-scroll-target="#sample-and-method">Sample and method</a></li>
+  <li><a href="#keywords-over-time" id="toc-keywords-over-time" class="nav-link" data-scroll-target="#keywords-over-time">Keywords over time</a></li>
+  <li><a href="#keyword-distribution-in-the-reports" id="toc-keyword-distribution-in-the-reports" class="nav-link" data-scroll-target="#keyword-distribution-in-the-reports">Keyword distribution in the reports</a></li>
+  <li><a href="#keyword-ranking" id="toc-keyword-ranking" class="nav-link" data-scroll-target="#keyword-ranking">Keyword ranking</a></li>
+  <li><a href="#keyword-ranking-by-section" id="toc-keyword-ranking-by-section" class="nav-link" data-scroll-target="#keyword-ranking-by-section">Keyword ranking by section</a></li>
+  <li><a href="#heatmap-of-hits-in-the-document" id="toc-heatmap-of-hits-in-the-document" class="nav-link" data-scroll-target="#heatmap-of-hits-in-the-document">Heatmap of hits in the document</a></li>
+  <li><a href="#cross-sectional-splits" id="toc-cross-sectional-splits" class="nav-link" data-scroll-target="#cross-sectional-splits">Cross-sectional splits</a></li>
+  <li><a href="#interactive" id="toc-interactive" class="nav-link" data-scroll-target="#interactive">Interactive</a></li>
+  <li><a href="#document-descriptives" id="toc-document-descriptives" class="nav-link" data-scroll-target="#document-descriptives">Document descriptives</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Technical stuff</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># title: "Connectivity Analyses"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># author: ["Maximilian A. Müller", "Gaizka Ormazabal", "Thorsten Sellhorn", "Victor Wagner"]</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># institute: ["University of Cologne", "IESE", "LMU Munich School of Management", "LMU Munich School of Management"]</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># number-sections: true</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># toc: true</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># format:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     pdf:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         geometry:</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#             - paper = a4paper</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         fig-pos: 'h'</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     html:</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#         toc: true</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># jupyter: python3</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># fig-width: 0.7</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># echo: false</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># output: asis</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># # pdf:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># #         geometry:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># #             - paper=a4paper</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># beamer:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         aspectratio: 169</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         header-includes: |</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#             \setbeamertemplate{navigation symbols}{}</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#             \setbeamertemplate{footline}[page number]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is the technical step-by-step procedure. Not interesting.</p>
+</div>
+</div>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
+<ul>
+<li>imports</li>
+<li>SRN data</li>
+<li>(check which firms and documents are needed and which are already here); Currently, we base our analyses on the documents that have already been manually coded (bottom-up); in the future, however, we do it top-down based on Euro Stoxx 600</li>
+<li>read in document data
+<ul>
+<li>read in manually coded documents</li>
+<li>check which have to be downloaded (b/c they are not here) and update</li>
+<li>check which have to be extracted (b/c it hasn’t been done) and update</li>
+<li>prepare for later analysis and merge with other data</li>
+</ul></li>
+</ul>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys, os, json, re</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># path to Dropbox directory with 'pdf', 'pdf-decrypt', 'docs_clean.json' and 'raw_texts.json'</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>BASE_PATH <span class="op">=</span> <span class="st">"/Users/victor.wagner/Dropbox/_Connectivity-Data"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>API_PATH  <span class="op">=</span> <span class="st">"https://api.sustainabilityreportingnavigator.com/api/"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>companies <span class="op">=</span> pd.read_json(<span class="ss">f'</span><span class="sc">{</span>API_PATH<span class="sc">}</span><span class="ss">companies'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>documents <span class="op">=</span> pd.read_json(<span class="ss">f'</span><span class="sc">{</span>API_PATH<span class="sc">}</span><span class="ss">documents'</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>indices   <span class="op">=</span> pd.read_json(<span class="ss">f'</span><span class="sc">{</span>API_PATH<span class="sc">}</span><span class="ss">indices'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># es600 = companies[['1cc738c1-e6b1-4f2b-8bec-2d963118de59' in ind for ind in companies.indices]]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># es600[['id', 'name', 'isin', 'country', 'sector']].merge(</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     documents[['id', 'year', 'type', 'company_id']], </span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     left_on='id', right_on='company_id',</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     suffixes=('_company', '_document')</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ).query()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="read-in-manually-collected-startend-pages" class="level3">
+<h3 class="anchored" data-anchor-id="read-in-manually-collected-startend-pages">Read in manually collected start/end pages</h3>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mergeManualCollections <span class="im">import</span> mergeManualCollections</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>manual_collections <span class="op">=</span> mergeManualCollections([</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'../data/connectivity-manual_collection - lmu_cologne - 20230926.csv'</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'../data/connectivity-manual_collection-iese - main - 20230926.csv'</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'../data/connectivity-manual_collection-iese - second_round - 20230926.csv'</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'We have'</span>, <span class="bu">len</span>(manual_collections), <span class="st">'manually coded documents, of which'</span>, </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="bu">len</span>(<span class="bu">set</span>(manual_collections.index).difference(<span class="bu">set</span>([x[:<span class="dv">36</span>] <span class="cf">for</span> x <span class="kw">in</span> os.listdir(BASE_PATH <span class="op">+</span> <span class="st">"/pdf/"</span>)]))),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">'are not downloaded.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="alert alert-block alert-danger">
+Use the following with caution, this will download, extract and clean all documents if they are not stored locally.
+</div>
+</section>
+<section id="update-pdfs-if-not-all-are-downloaded-yet" class="level3">
+<h3 class="anchored" data-anchor-id="update-pdfs-if-not-all-are-downloaded-yet">Update pdfs if not all are downloaded yet</h3>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> downloadPdfs <span class="im">import</span> downloadPdfs</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>doc_status <span class="op">=</span> downloadPdfs(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    BASE_PATH,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">zip</span>(manual_collections[<span class="st">'href_doc'</span>],</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        manual_collections.index)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'There were'</span>, <span class="bu">sum</span>([x <span class="op">==</span> <span class="st">'downloaded'</span> <span class="cf">for</span> x <span class="kw">in</span> doc_status]), <span class="st">'new downloads,'</span>, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="bu">sum</span>([x <span class="op">==</span> <span class="st">'no download'</span> <span class="cf">for</span> x <span class="kw">in</span> doc_status]), <span class="st">'document could not be downloaded.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There were 51 new downloads, 1 document could not be downloaded.</code></pre>
+</div>
+</div>
+</section>
+<section id="extract-text-from-pdfs-if-not-done-so-yet" class="level3">
+<h3 class="anchored" data-anchor-id="extract-text-from-pdfs-if-not-done-so-yet">Extract text from pdfs if not done so yet</h3>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>raw_texts_old <span class="op">=</span> pd.read_json(<span class="ss">f"</span><span class="sc">{</span>BASE_PATH<span class="sc">}</span><span class="ss">/pdf/../raw_texts.json"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'We already have raw text for'</span>, <span class="bu">len</span>(raw_texts_old), <span class="st">'documents, decrypting and reading'</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>     <span class="bu">len</span>(manual_collections)<span class="op">-</span><span class="bu">len</span>(raw_texts_old), <span class="st">'documents now.'</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> readTextFromPdf <span class="im">import</span> readTextFromPdf</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>raw_texts_new, doc_status_new <span class="op">=</span> [], []</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>raw_texts_new, doc_status_new <span class="op">=</span> <span class="bu">map</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">list</span>, </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">zip</span>(<span class="op">*</span>[readTextFromPdf(BASE_PATH, doc_id) <span class="cf">for</span> doc_id <span class="kw">in</span> manual_collections.index])</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>raw_texts_newDict <span class="op">=</span> {doc_id: (r,s) <span class="cf">for</span> doc_id,r,s <span class="kw">in</span> <span class="bu">zip</span>(manual_collections.index, raw_texts_new, doc_status_new)}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>We already have raw text for 961 documents, decrypting and reading 0 documents now.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> updateRawTexts <span class="im">import</span> updateRawTexts</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>raw_texts_final <span class="op">=</span> updateRawTexts(raw_texts_old, raw_texts_newDict)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>raw_texts_final.to_json(<span class="ss">f"</span><span class="sc">{</span>BASE_PATH<span class="sc">}</span><span class="ss">/pdf/../raw_texts.json"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'There are'</span>, <span class="bu">sum</span>([x <span class="op">==</span> <span class="st">'problem_decrypting'</span> <span class="cf">for</span> x <span class="kw">in</span> raw_texts_final.status]), <span class="st">'documents with decryption problems'</span>, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>     <span class="st">'and'</span>, <span class="bu">sum</span>([x <span class="op">==</span> <span class="st">'problem_opening'</span> <span class="cf">for</span> x <span class="kw">in</span> raw_texts_final.status]), <span class="st">'documents that could not be read.'</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'This leaves us with a readable sample of'</span>, <span class="bu">sum</span>([x <span class="op">==</span> <span class="st">'fine'</span> <span class="cf">for</span> x <span class="kw">in</span> raw_texts_final.status]), <span class="st">'documents.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 184 documents with decryption problems and 0 documents that could not be read.
+This leaves us with a readable sample of 777 documents.</code></pre>
+</div>
+</div>
+</section>
+<section id="clean-text-if-not-done-so-yet" class="level3">
+<h3 class="anchored" data-anchor-id="clean-text-if-not-done-so-yet">Clean text if not done so yet</h3>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>docs_cleaned_old <span class="op">=</span> pd.read_json(<span class="ss">f"</span><span class="sc">{</span>BASE_PATH<span class="sc">}</span><span class="ss">/docs_clean.json"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'There is already clean data for'</span>, <span class="bu">len</span>(docs_cleaned_old), <span class="st">'documents, cleaning'</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="bu">len</span>(raw_texts_final.query(<span class="st">'status == "fine"'</span>))<span class="op">-</span><span class="bu">len</span>(docs_cleaned_old), <span class="st">'documents.'</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> updateAndCleanText <span class="im">import</span> updateAndCleanText</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>docs_cleaned_new <span class="op">=</span> updateAndCleanText(docs_cleaned_old, raw_texts_final)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>docs_cleaned_new.to_json(<span class="ss">f"</span><span class="sc">{</span>BASE_PATH<span class="sc">}</span><span class="ss">/pdf/../docs_clean.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There is already clean data for 961 documents, cleaning -184 documents.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> raw_texts_final, raw_texts_new, raw_texts_newDict, raw_texts_old</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> docs_cleaned_old</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="merge-other-data-to-documents" class="level3">
+<h3 class="anchored" data-anchor-id="merge-other-data-to-documents">Merge other data to documents</h3>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#docs_cleaned_new.drop(columns=['clean_text_full'], inplace=True)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> docs_cleaned_new.merge(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    documents[[<span class="st">'id'</span>, <span class="st">'company_id'</span>, <span class="st">'year'</span>]], </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    left_index<span class="op">=</span><span class="va">True</span>, right_on<span class="op">=</span><span class="st">'id'</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>).merge(</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    companies[[<span class="st">'id'</span>, <span class="st">'name'</span>, <span class="st">'isin'</span>, <span class="st">'country'</span>, <span class="st">'sector'</span>]], </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    left_on<span class="op">=</span><span class="st">'company_id'</span>, right_on<span class="op">=</span><span class="st">'id'</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    suffixes<span class="op">=</span>(<span class="st">''</span>, <span class="st">'_company'</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>).set_index(</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'id'</span>, drop<span class="op">=</span><span class="va">True</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>).drop(</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'id_company'</span>, axis<span class="op">=</span><span class="dv">1</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="merge-manually-coded-section-data" class="level3">
+<h3 class="anchored" data-anchor-id="merge-manually-coded-section-data">Merge manually coded section data</h3>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> docs.merge(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    manual_collections[[<span class="st">'mda_begin'</span>, <span class="st">'mda_end'</span>, <span class="st">'fs_begin'</span>, <span class="st">'fs_end'</span>, <span class="st">'audit_begin'</span>, <span class="st">'audit_end'</span>]], </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    left_index<span class="op">=</span><span class="va">True</span>, right_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> docs.reset_index(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>).merge(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    docs.groupby(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'company_id'</span>]).size().reset_index(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    ).rename(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">'company_years_avlbl'</span>}), on<span class="op">=</span><span class="st">'company_id'</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>).set_index(<span class="st">'index'</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop obvious outlier</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>docs.drop(docs[(docs[<span class="st">'isin'</span>] <span class="op">==</span> <span class="st">'ES0130670112'</span>) <span class="op">&amp;</span> (docs[<span class="st">'year'</span>] <span class="op">==</span> <span class="dv">2020</span>)].index, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="sec-doc-sample" class="level2">
+<h2 class="anchored" data-anchor-id="sec-doc-sample">Document sample selection</h2>
+<p>We distributed the EURO Stoxx 600 firms to student assistants to extract information on the structure of annual reports. So far, this resulted in the following documents sample: 1. no metadata in the SRN database yet, 1. after removing not readable pdfs, 2. pdfs where no text was scanned, and 3. pdfs with too little words (documents where the average clean text characters are less than 1,500 in a document).</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>docs0 <span class="op">=</span> docs.query(<span class="st">'status == "fine"'</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>docs1 <span class="op">=</span> docs0.query(<span class="st">'clean_text_len &gt; 0'</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>docs2 <span class="op">=</span> docs1.query(<span class="st">'avgCleanTextPerPage &gt; 1500'</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>TpdfSample <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">''</span>, <span class="st">'less'</span>, <span class="st">'resulting'</span>])</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>TpdfSample.loc[<span class="bu">len</span>(TpdfSample),:] <span class="op">=</span> [<span class="st">'downloaded pdfs'</span>,      <span class="st">''</span>,                             <span class="bu">len</span>(docs_cleaned_new)]</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>TpdfSample.loc[<span class="bu">len</span>(TpdfSample),:] <span class="op">=</span> [<span class="st">'no metadata'</span>,       <span class="st">'-'</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">len</span>(docs_cleaned_new) <span class="op">-</span><span class="bu">len</span>(docs)), <span class="bu">len</span>(docs)]</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>TpdfSample.loc[<span class="bu">len</span>(TpdfSample),:] <span class="op">=</span> [<span class="st">'not readable'</span>,      <span class="st">'-'</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">len</span>(docs) <span class="op">-</span><span class="bu">len</span>(docs0)), <span class="bu">len</span>(docs0)]</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>TpdfSample.loc[<span class="bu">len</span>(TpdfSample),:] <span class="op">=</span> [<span class="st">'zero text scanned'</span>, <span class="st">'-'</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">len</span>(docs0)<span class="op">-</span><span class="bu">len</span>(docs1)), <span class="bu">len</span>(docs1)]</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>TpdfSample.loc[<span class="bu">len</span>(TpdfSample),:] <span class="op">=</span> [<span class="st">'too little words*'</span>, <span class="st">'-'</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">len</span>(docs1)<span class="op">-</span><span class="bu">len</span>(docs2)), <span class="bu">len</span>(docs2)]</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#print(TpdfSample.to_markdown(index=False))</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#print('\nThis leaves us with', len(docs2['company_id'].unique()), 'unique firms.')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell tbl-cap-location-top" data-tbl-width="80%" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>TpdfSample.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<div id="tbl-documents-sample" class="anchored">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1" data-tbl-colwidths="[50,25,25]">
+<caption>Table&nbsp;1: Sample selection documents</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">less</th>
+<th data-quarto-table-cell-role="th">resulting</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>downloaded pdfs</td>
+<td></td>
+<td>961</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>no metadata</td>
+<td>-53</td>
+<td>908</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>not readable</td>
+<td>-168</td>
+<td>740</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>zero text scanned</td>
+<td>-28</td>
+<td>712</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>too little words*</td>
+<td>-102</td>
+<td>610</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+<section id="keyword-search" class="level2">
+<h2 class="anchored" data-anchor-id="keyword-search">Keyword search</h2>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> findSections <span class="im">import</span> findSections</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>pd.options.mode.chained_assignment <span class="op">=</span> <span class="va">None</span>  <span class="co"># default='warn'</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>docsa <span class="op">=</span> findSections(docs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="search-patterns" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>search_patterns <span class="op">=</span> [<span class="st">'ghg'</span>, <span class="st">'co2'</span>, <span class="st">'carbon'</span>, <span class="st">'climat'</span>, <span class="st">'emission'</span>, <span class="st">'regulatory risk'</span>, <span class="st">'physical risk'</span>, <span class="st">'transition risk'</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(search_patterns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['ghg', 'co2', 'carbon', 'climat', 'emission', 'regulatory risk', 'physical risk', 'transition risk']</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lim <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> searchText(doc, search_patterns):</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    matches <span class="op">=</span> []</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> section <span class="kw">in</span> [<span class="st">'mda_text'</span>, <span class="st">'fs_text'</span>, <span class="st">'audit_text'</span>, <span class="st">'other_text'</span>]:</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pat <span class="kw">in</span> search_patterns:</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> page, text <span class="kw">in</span> doc[section<span class="op">+</span><span class="st">'_dict'</span>].items():</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> hit <span class="kw">in</span> re.finditer(pat, text):</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                    matches.append({</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'pattern'</span>: pat,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'section'</span>: section[:<span class="op">-</span><span class="dv">5</span>],</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'snippet'</span>: text[hit.start()<span class="op">-</span>lim : hit.start()<span class="op">+</span><span class="bu">len</span>(pat)<span class="op">+</span>lim],</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'page'</span>   : page</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>                    })</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> matches</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>docsa[<span class="st">'hits'</span>] <span class="op">=</span> [pd.DataFrame(searchText(doc, search_patterns)) <span class="cf">for</span> _, doc <span class="kw">in</span> docsa.iterrows()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="564">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># for sec in sections:</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     docsamax[sec+'_hit'] = [len(list(filter(lambda hit: hit['section'] == sec, searchText(doc, search_patterns)))) for _, doc in docsa.iterrows()]</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for pat in search_patterns:</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     docsamax[pat+'_hit'] = [len(list(filter(lambda hit: hit['pattern'] == pat, searchText(doc, search_patterns)))) for _, doc in docsa.iterrows()]</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     docsamax[pat+'_fs_hit'] = [len(list(filter(lambda hit: (hit['pattern'] == pat) and (hit['section'] == 'fs'), searchText(doc, search_patterns)))) for _, doc in docsa.iterrows()]</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="519">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># snippets = pd.DataFrame(columns=['document_id', 'isin', 'year', 'pattern', 'section', 'snippet'])</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># for idx, doc in docsa.iterrows():</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     for _, hit in doc.hits.iterrows():</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         snippets.loc[len(snippets)] = [idx, doc['isin'], doc['year'], hit['pattern'], hit['section'], hit['snippet']]</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># snippets.info()</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># snippets.to_csv('snippets.csv', index=False)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'../data/worldscope_msci_carbon.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="analyses" class="level1">
+<h1>Analyses</h1>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mpl.rcParams[<span class="st">'figure.dpi'</span>] <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>sections <span class="op">=</span> [<span class="st">'fs'</span>, <span class="st">'audit'</span>, <span class="st">'mda'</span>, <span class="st">'other'</span>]</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="bu">sorted</span>(docsa.year.unique())</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'#ff1f5b'</span>, <span class="st">'#009ade'</span>, <span class="st">'#af58ba'</span>, <span class="st">'#ffc61e'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="sample-and-method" class="level2">
+<h2 class="anchored" data-anchor-id="sample-and-method">Sample and method</h2>
+<ul>
+<li>We downloaded 961 annual reports from Euro Stoxx 600 firms in pdf format</li>
+<li>After cleaning (see more <a href="#sec-doc-sample">Section&nbsp;0.2</a>), we were able to extract text from 611 documents</li>
+<li>We then manually classified different sections of these reports
+<ul>
+<li>MD&amp;A (a.k.a. management report, Lagebericht, etc.)</li>
+<li>Financial Statements and Notes</li>
+<li>Auditor’s Report</li>
+</ul></li>
+<li>And searched for climate-related keywords</li>
+</ul>
+</section>
+<section id="keywords-over-time" class="level2">
+<h2 class="anchored" data-anchor-id="keywords-over-time">Keywords over time</h2>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> docsa.copy()</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sec <span class="kw">in</span> sections:</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    data[sec<span class="op">+</span><span class="st">'_hits'</span>] <span class="op">=</span> [<span class="bu">len</span>(<span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> hit: hit[<span class="st">'section'</span>] <span class="op">==</span> sec, searchText(doc, search_patterns)))) <span class="cf">for</span> _, doc <span class="kw">in</span> docsa.iterrows()]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'total_hits'</span>] <span class="op">=</span> [<span class="bu">len</span>(searchText(doc, search_patterns)) <span class="cf">for</span> _, doc <span class="kw">in</span> docsa.iterrows()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>avg_hits_perSec_perYear <span class="op">=</span> [[np.mean(data.query(<span class="st">'year == @year'</span>)[sec<span class="op">+</span><span class="st">'_hits'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years] <span class="cf">for</span> sec <span class="kw">in</span> sections]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>med_hits_perSec_perYear <span class="op">=</span> [[np.median(data.query(<span class="st">'year == @year'</span>)[sec<span class="op">+</span><span class="st">'_hits'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years] <span class="cf">for</span> sec <span class="kw">in</span> sections]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>avg_hitsPerPage_perSec_perYear <span class="op">=</span> [[np.mean(data.query(<span class="st">'year == @year'</span>)[sec<span class="op">+</span><span class="st">'_hits'</span>]<span class="op">/</span>data.query(<span class="st">'year == @year'</span>)[<span class="st">'n_pages'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years] <span class="cf">for</span> sec <span class="kw">in</span> sections]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-jupyter="{&quot;source_hidden&quot;:true}" data-execution_count="220">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fs_hits_avg_yrs <span class="op">=</span>    [np.mean(data.query(<span class="st">'year == @year'</span>)[<span class="st">'fs_hits'</span>])    <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>audit_hits_avg_yrs <span class="op">=</span> [np.mean(data.query(<span class="st">'year == @year'</span>)[<span class="st">'audit_hits'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>mda_hits_avg_yrs <span class="op">=</span>   [np.mean(data.query(<span class="st">'year == @year'</span>)[<span class="st">'mda_hits'</span>])   <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>other_hits_avg_yrs <span class="op">=</span> [np.mean(data.query(<span class="st">'year == @year'</span>)[<span class="st">'other_hits'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>fs_hits_med_yrs <span class="op">=</span>    [np.median(data.query(<span class="st">'year == @year'</span>)[<span class="st">'fs_hits'</span>])    <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>audit_hits_med_yrs <span class="op">=</span> [np.median(data.query(<span class="st">'year == @year'</span>)[<span class="st">'audit_hits'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>mda_hits_med_yrs <span class="op">=</span>   [np.median(data.query(<span class="st">'year == @year'</span>)[<span class="st">'mda_hits'</span>])   <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>other_hits_med_yrs <span class="op">=</span> [np.median(data.query(<span class="st">'year == @year'</span>)[<span class="st">'other_hits'</span>]) <span class="cf">for</span> year <span class="kw">in</span> years]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fs_hits_byY <span class="op">=</span> [data.query(<span class="st">'year == @year'</span>)[<span class="st">'fs_hits'</span>].values <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>fs_hits_ci  <span class="op">=</span> [stats.t.interval(<span class="fl">0.95</span>, <span class="bu">len</span>(hits_byY)<span class="op">-</span><span class="dv">1</span>, loc<span class="op">=</span>hits_byY.mean(), scale<span class="op">=</span>hits_byY.std()) <span class="cf">for</span> hits_byY <span class="kw">in</span> fs_hits_byY]</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>fs_hits_iqr <span class="op">=</span> [stats.iqr(x) <span class="cf">for</span> x <span class="kw">in</span> fs_hits_byY]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>fs_hits_q1  <span class="op">=</span> [np.quantile(data.query(<span class="st">'year == @year'</span>)[<span class="st">'fs_hits'</span>], <span class="fl">0.25</span>) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>fs_hits_q3  <span class="op">=</span> [np.quantile(data.query(<span class="st">'year == @year'</span>)[<span class="st">'fs_hits'</span>], <span class="fl">0.75</span>) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>audit_hits_byY <span class="op">=</span> [data.query(<span class="st">'year == @year'</span>)[<span class="st">'audit_hits'</span>].values <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>audit_hits_ci  <span class="op">=</span> [stats.t.interval(<span class="fl">0.95</span>, <span class="bu">len</span>(hits_byY)<span class="op">-</span><span class="dv">1</span>, loc<span class="op">=</span>hits_byY.mean(), scale<span class="op">=</span>hits_byY.std()) <span class="cf">for</span> hits_byY <span class="kw">in</span> audit_hits_byY]</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>audit_hits_iqr <span class="op">=</span> [stats.iqr(x) <span class="cf">for</span> x <span class="kw">in</span> audit_hits_byY]</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>audit_hits_q1  <span class="op">=</span> [np.quantile(data.query(<span class="st">'year == @year'</span>)[<span class="st">'audit_hits'</span>], <span class="fl">0.25</span>) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>audit_hits_q3  <span class="op">=</span> [np.quantile(data.query(<span class="st">'year == @year'</span>)[<span class="st">'audit_hits'</span>], <span class="fl">0.75</span>) <span class="cf">for</span> year <span class="kw">in</span> years]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true,&quot;source_hidden&quot;:true}" data-execution_count="598">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig, ax1 <span class="op">=</span> plt.subplots()</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, med_hits_perSec_perYear[<span class="dv">0</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#ff1f5b'</span>, label<span class="op">=</span><span class="st">'fs+notes'</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, med_hits_perSec_perYear[<span class="dv">1</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#009ade'</span>, label<span class="op">=</span><span class="st">'audit'</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for year, n in zip(years, range(len(years))):</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax1.plot(</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         (year, year), </span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         (med_hits_perSec_perYear[0][n]+fs_hits_q3[n], </span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co">#          med_hits_perSec_perYear[0][n]-fs_hits_q1[n]), </span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         '_-', color='#ff1f5b', alpha=0.5</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax1.plot(</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co">#         (year, year), </span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="co">#         (med_hits_perSec_perYear[1][n]+audit_hits_q3[n], </span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co">#          med_hits_perSec_perYear[1][n]-audit_hits_q1[n]), </span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co">#         '_-', color='#009ade', alpha=0.5</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'median hits per section'</span>)</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>docsPerYear <span class="op">=</span> [<span class="bu">len</span>(data.query(<span class="st">'year == @year'</span>)) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> ax1.twinx()</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>ax2.bar(x<span class="op">=</span>years, height<span class="op">=</span>docsPerYear, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>ax2.set_ylim([<span class="dv">0</span>,<span class="dv">600</span>])</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>ax2.tick_params(axis<span class="op">=</span><span class="st">'y'</span>)</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'#docs'</span>)</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>plt.table([[<span class="bu">round</span>(y, <span class="dv">2</span>) <span class="cf">for</span> y <span class="kw">in</span> x] <span class="cf">for</span> x <span class="kw">in</span> med_hits_perSec_perYear<span class="op">+</span>[docsPerYear]],</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>         rowLabels<span class="op">=</span>[<span class="st">'fs+notes'</span>, <span class="st">'audit'</span>, <span class="st">'mda'</span>, <span class="st">'other'</span>, <span class="st">'#docs'</span>],</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>         rowColours<span class="op">=</span>[<span class="st">'#ff1f5b'</span>, <span class="st">'#009ade'</span>, <span class="st">'#ffffff'</span>, <span class="st">'#ffffff'</span>, <span class="st">'lightgray'</span>],</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>         colLabels<span class="op">=</span>years, loc<span class="op">=</span><span class="st">'bottom'</span>, cellLoc<span class="op">=</span><span class="st">'right'</span>, edges<span class="op">=</span><span class="st">'horizontal'</span>, bbox<span class="op">=</span>[<span class="dv">0</span>, <span class="op">-</span><span class="fl">0.4</span>, <span class="dv">1</span>, <span class="fl">0.4</span>])</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>ax1.set_xticks([])</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>ax2.set_xticks([])</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a><span class="co">#ax1.set_title(f'n={len(data)} reports with {sum(data["total_hits"])} total keyword hits with IQR')</span></span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>ax1.legend()<span class="co">#ncol=4, bbox_to_anchor=(0.75,-0.1))</span></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.savefig('figures/fig202309271823.png', dpi=400, bbox_inches='tight')</span></span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="output-analyses_files/figure-html/cell-54-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.interpolate <span class="im">import</span> make_interp_spline</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>splined_fs    <span class="op">=</span> make_interp_spline(years, avg_hits_perSec_perYear[<span class="dv">0</span>])</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>splined_audit <span class="op">=</span> make_interp_spline(years, avg_hits_perSec_perYear[<span class="dv">1</span>])</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>years_spl <span class="op">=</span> np.linspace(<span class="bu">min</span>(years), <span class="bu">max</span>(years), <span class="dv">500</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>y_fs      <span class="op">=</span> splined_fs(years_spl)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>y_audit   <span class="op">=</span> splined_audit(years_spl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>fig, ax1 <span class="op">=</span> plt.subplots()</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>ax1.plot(years_spl, y_fs, <span class="st">'-'</span>, color<span class="op">=</span><span class="st">'#ff1f5b'</span>, label<span class="op">=</span><span class="st">'fs+notes'</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>ax1.plot(years_spl, y_audit, <span class="st">'-'</span>, color<span class="op">=</span><span class="st">'#009ade'</span>, label<span class="op">=</span><span class="st">'audit'</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># for year, n in zip(years, range(len(years))):</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax1.plot(</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         (year, year), </span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         (avg_hits_perSec_perYear[0][n]+fs_hits_ci[n][0], </span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">#          avg_hits_perSec_perYear[0][n]+fs_hits_ci[n][1]), </span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         '_-', color='#ff1f5b', alpha=0.5)</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax1.plot(</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co">#         (year, year), </span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co">#         (avg_hits_perSec_perYear[1][n]+audit_hits_ci[n], </span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="co">#          avg_hits_perSec_perYear[1][n]+audit_hits_ci[n]), </span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="co">#         '_-', color='#009ade', alpha=0.5)</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'average hits per section'</span>)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>docsPerYear <span class="op">=</span> [<span class="bu">len</span>(data.query(<span class="st">'year == @year'</span>)) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> ax1.twinx()</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>ax2.bar(x<span class="op">=</span>years, height<span class="op">=</span>docsPerYear, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>ax2.set_ylim([<span class="dv">0</span>,<span class="dv">600</span>])</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>ax2.tick_params(axis<span class="op">=</span><span class="st">'y'</span>)</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'#docs'</span>)</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>plt.table([[<span class="bu">round</span>(y, <span class="dv">2</span>) <span class="cf">for</span> y <span class="kw">in</span> x] <span class="cf">for</span> x <span class="kw">in</span> avg_hits_perSec_perYear<span class="op">+</span>[docsPerYear]],</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>         rowLabels<span class="op">=</span>[<span class="st">'fs+notes'</span>, <span class="st">'audit'</span>, <span class="st">'mda'</span>, <span class="st">'other'</span>, <span class="st">'#docs'</span>],</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>         rowColours<span class="op">=</span>[<span class="st">'#ff1f5b'</span>, <span class="st">'#009ade'</span>, <span class="st">'#ffffff'</span>, <span class="st">'#ffffff'</span>, <span class="st">'lightgray'</span>],</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>         colLabels<span class="op">=</span>years, loc<span class="op">=</span><span class="st">'bottom'</span>, cellLoc<span class="op">=</span><span class="st">'right'</span>, edges<span class="op">=</span><span class="st">'horizontal'</span>, bbox<span class="op">=</span>[<span class="dv">0</span>, <span class="op">-</span><span class="fl">0.4</span>, <span class="dv">1</span>, <span class="fl">0.4</span>])</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>ax1.set_xticks([])</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>ax2.set_xticks([])</span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a><span class="co">#ax1.set_title(f'n={len(data)} reports with {sum(data["total_hits"])} total keyword hits with IQR')</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>ax1.legend()<span class="co">#ncol=4, bbox_to_anchor=(0.75,-0.1))</span></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.savefig('figures/fig202309280927.png', dpi=400, bbox_inches='tight')</span></span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309281056" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309281056-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Development of average hits</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="130">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fig, ax1 <span class="op">=</span> plt.subplots()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hits_perSec_perYear[<span class="dv">0</span>],    <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#ff1f5b'</span>, label<span class="op">=</span><span class="st">'fs+notes'</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hits_perSec_perYear[<span class="dv">1</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#009ade'</span>, label<span class="op">=</span><span class="st">'audit'</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hits_perSec_perYear[<span class="dv">2</span>],   <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#af58ba'</span>, label<span class="op">=</span><span class="st">'mda'</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hits_perSec_perYear[<span class="dv">3</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#ffc61e'</span>, label<span class="op">=</span><span class="st">'other'</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'average hits per section'</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>docsPerYear <span class="op">=</span> [<span class="bu">len</span>(data.query(<span class="st">'year == @year'</span>)) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> ax1.twinx()</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>ax2.bar(x<span class="op">=</span>years, height<span class="op">=</span>docsPerYear, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>ax2.set_ylim([<span class="dv">0</span>,<span class="dv">600</span>])</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>ax2.tick_params(axis<span class="op">=</span><span class="st">'y'</span>)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'#docs'</span>)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>plt.table([[<span class="bu">round</span>(y, <span class="dv">2</span>) <span class="cf">for</span> y <span class="kw">in</span> x] <span class="cf">for</span> x <span class="kw">in</span> avg_hits_perSec_perYear<span class="op">+</span>[docsPerYear]],</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>         rowLabels<span class="op">=</span>[<span class="st">'fs+notes'</span>, <span class="st">'audit'</span>, <span class="st">'mda'</span>, <span class="st">'other'</span>, <span class="st">'#docs'</span>],</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>         rowColours<span class="op">=</span>[<span class="st">'#ff1f5b'</span>, <span class="st">'#009ade'</span>, <span class="st">'#af58ba'</span>, <span class="st">'#ffc61e'</span>, <span class="st">'lightgray'</span>],</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>         colLabels<span class="op">=</span>years, loc<span class="op">=</span><span class="st">'bottom'</span>, cellLoc<span class="op">=</span><span class="st">'right'</span>, bbox<span class="op">=</span>[<span class="dv">0</span>, <span class="op">-</span><span class="fl">0.4</span>, <span class="dv">1</span>, <span class="fl">0.4</span>])</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>ax1.set_xticks([])</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>ax2.set_xticks([])</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="co">#ax1.set_title(f'n={len(data)} reports with {sum(data["total_hits"])} total keyword hits')</span></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>ax1.legend()<span class="co">#ncol=4, bbox_to_anchor=(0.75,-0.1))</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.savefig('figures/fig202309272029.png', dpi=400, bbox_inches='tight')</span></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309271823" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309271823-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Development of average hits</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="131">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>fig, ax1 <span class="op">=</span> plt.subplots()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hitsPerPage_perSec_perYear[<span class="dv">0</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#ff1f5b'</span>, label<span class="op">=</span><span class="st">'fs+notes'</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hitsPerPage_perSec_perYear[<span class="dv">1</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#009ade'</span>, label<span class="op">=</span><span class="st">'audit'</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hitsPerPage_perSec_perYear[<span class="dv">2</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#af58ba'</span>, label<span class="op">=</span><span class="st">'mda'</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>ax1.plot(years, avg_hitsPerPage_perSec_perYear[<span class="dv">3</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#ffc61e'</span>, label<span class="op">=</span><span class="st">'other'</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'average hits per page by section'</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>docsPerYear <span class="op">=</span> [<span class="bu">len</span>(data.query(<span class="st">'year == @year'</span>)) <span class="cf">for</span> year <span class="kw">in</span> years]</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> ax1.twinx()</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>ax2.bar(x<span class="op">=</span>years, height<span class="op">=</span>docsPerYear, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>ax2.set_ylim([<span class="dv">0</span>,<span class="dv">600</span>])</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>ax2.tick_params(axis<span class="op">=</span><span class="st">'y'</span>)</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'#docs'</span>)</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>plt.table([[<span class="bu">round</span>(y, <span class="dv">2</span>) <span class="cf">for</span> y <span class="kw">in</span> x] <span class="cf">for</span> x <span class="kw">in</span> avg_hitsPerPage_perSec_perYear<span class="op">+</span>[docsPerYear]],</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>         rowLabels<span class="op">=</span>[<span class="st">'fs+notes'</span>, <span class="st">'audit'</span>, <span class="st">'mda'</span>, <span class="st">'other'</span>, <span class="st">'#docs'</span>],</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>         rowColours<span class="op">=</span>[<span class="st">'#ff1f5b'</span>, <span class="st">'#009ade'</span>, <span class="st">'#af58ba'</span>, <span class="st">'#ffc61e'</span>, <span class="st">'lightgray'</span>],</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>         colLabels<span class="op">=</span>years, loc<span class="op">=</span><span class="st">'bottom'</span>, cellLoc<span class="op">=</span><span class="st">'right'</span>, bbox<span class="op">=</span>[<span class="dv">0</span>, <span class="op">-</span><span class="fl">0.4</span>, <span class="dv">1</span>, <span class="fl">0.4</span>])</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>ax1.set_xticks([])</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>ax2.set_xticks([])</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a><span class="co">#ax1.set_title(f'n={len(data)} reports with {sum(data["total_hits"])} total keyword hits')</span></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>ax1.legend()<span class="co">#ncol=4, bbox_to_anchor=(0.75,-0.1))</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.savefig('figures/fig202309272029.png', dpi=400, bbox_inches='tight')</span></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309281057" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309281057-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Development of hits per page</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="keyword-distribution-in-the-reports" class="level2">
+<h2 class="anchored" data-anchor-id="keyword-distribution-in-the-reports">Keyword distribution in the reports</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots(1,4,figsize=(12,3), sharey=True)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># #ax[0].hist(data.total_hits, color='lightgray')</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ax[0].hist(data.fs_hits,    color='#ff1f5b')</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ax[1].hist(data.audit_hits, color='#009ade')</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ax[2].hist(data.mda_hits,   color='#af58ba')</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ax[3].hist(data.other_hits, color='#ffc61e')</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># for n, title in zip(range(4), ['fs+notes', 'audit', 'mda', 'other']):</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax[n].set_title(title)</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.suptitle(f'Distribution of hits per document by section', y=1.1)</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.savefig('figures/fig202309271836.png', dpi=400, bbox_inches='tight')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="keyword-ranking" class="level2">
+<h2 class="anchored" data-anchor-id="keyword-ranking">Keyword ranking</h2>
+<div class="cell" data-execution_count="132">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> docsa.copy()</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pat <span class="kw">in</span> search_patterns:</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    data[pat] <span class="op">=</span> [<span class="bu">len</span>(<span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> hit: hit[<span class="st">'pattern'</span>] <span class="op">==</span> pat, searchText(doc, search_patterns)))) <span class="cf">for</span> _, doc <span class="kw">in</span> docsa.iterrows()]</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'total_hits'</span>] <span class="op">=</span> [<span class="bu">len</span>(searchText(doc, search_patterns)) <span class="cf">for</span> _, doc <span class="kw">in</span> docsa.iterrows()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="133">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ax.bar(search_patterns, [np.<span class="bu">sum</span>(data[pat].values) <span class="cf">for</span> pat <span class="kw">in</span> search_patterns], color<span class="op">=</span><span class="st">'#a0b1ba'</span>, zorder<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#ax.set_title(f'Distribution of hits per keyword (total hits={sum(data.total_hits)})')</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">6.45</span>,<span class="dv">30500</span>,<span class="ss">f'n=</span><span class="sc">{</span><span class="bu">sum</span>(data.total_hits)<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>plt.grid(axis<span class="op">=</span><span class="st">'y'</span>, color<span class="op">=</span><span class="st">'lightgray'</span>, zorder<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">90</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">'figures/fig202309272100.png'</span>, dpi<span class="op">=</span><span class="dv">400</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309281109" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309281109-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: keyword ranking</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="keyword-ranking-by-section" class="level2">
+<h2 class="anchored" data-anchor-id="keyword-ranking-by-section">Keyword ranking by section</h2>
+<p>The difference b/w the total number of search hits is because from here, I included <code>ghg</code> and <code>co2</code></p>
+<div class="cell" data-execution_count="134">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sections <span class="op">=</span> [<span class="st">'fs'</span>, <span class="st">'audit'</span>, <span class="st">'mda'</span>, <span class="st">'other'</span>]</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>totals <span class="op">=</span> {k:v <span class="cf">for</span> k,v <span class="kw">in</span> <span class="bu">zip</span>(</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    sections,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    [[<span class="bu">sum</span>(<span class="bu">len</span>(<span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> hit: (hit[<span class="st">'section'</span>] <span class="op">==</span> sec) <span class="op">&amp;</span> (hit[<span class="st">'pattern'</span>] <span class="op">==</span> pat), searchText(doc, search_patterns))))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> _, doc <span class="kw">in</span> docsa.iterrows()) </span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> pat <span class="kw">in</span> search_patterns] </span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> sec <span class="kw">in</span> sections]</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>)}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="135">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>mpl.rcParams[<span class="st">'axes.prop_cycle'</span>] <span class="op">=</span> mpl.cycler(color<span class="op">=</span>[<span class="st">'#ff1f5b'</span>, <span class="st">'#009ade'</span>, <span class="st">'#af58ba'</span>, <span class="st">'#ffc61e'</span>])</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>label_locs <span class="op">=</span> np.arange(<span class="bu">len</span>(search_patterns))</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>multiplier <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sec <span class="kw">in</span> <span class="bu">list</span>(totals.keys())[:<span class="dv">2</span>]:</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> width <span class="op">*</span> multiplier</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    ax.bar(label_locs<span class="op">+</span>offset, totals[sec], width<span class="op">=</span>width, label<span class="op">=</span>sec, edgecolor<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax.bar_label(rects, padding=3)</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    multiplier <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(label_locs<span class="op">+</span>width)</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels(search_patterns)</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">90</span>)</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">'figures/fig202309272158.png'</span>, dpi<span class="op">=</span><span class="dv">400</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309281112" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309281112-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: Keyword ranking by section</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="136">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>label_locs <span class="op">=</span> np.arange(<span class="bu">len</span>(search_patterns))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>multiplier <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sec, byKeyword <span class="kw">in</span> totals.items():</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> width <span class="op">*</span> multiplier</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    ax.bar(label_locs<span class="op">+</span>offset, byKeyword, width<span class="op">=</span>width, label<span class="op">=</span>sec, edgecolor<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax.bar_label(rects, padding=3)</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    multiplier <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(label_locs<span class="op">+</span>width)</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels(search_patterns)</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">90</span>)</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">'figures/fig202309272147.png'</span>, dpi<span class="op">=</span><span class="dv">400</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309281111" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309281111-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;6: Keyword ranking by section</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="heatmap-of-hits-in-the-document" class="level2">
+<h2 class="anchored" data-anchor-id="heatmap-of-hits-in-the-document">Heatmap of hits in the document</h2>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>[</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'document_id'</span>, <span class="st">'company_id'</span>, <span class="st">'year'</span>, <span class="st">'fs_begin'</span>, <span class="st">'fs_end'</span>, <span class="st">'audit_begin'</span>, <span class="st">'audit_end'</span>, </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'pattern'</span>, <span class="st">'section'</span>, <span class="st">'page'</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> doc_id, doc <span class="kw">in</span> docsa.iterrows():</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, hit <span class="kw">in</span> doc.hits.iterrows():</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (hit.section <span class="op">==</span> <span class="st">'fs'</span>) <span class="kw">or</span> (hit.section <span class="op">==</span> <span class="st">'audit'</span>):</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>            data1.loc[<span class="bu">len</span>(data1)] <span class="op">=</span> [</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>                doc_id, doc.company_id, doc.year, doc.fs_begin, doc.fs_end, doc.audit_begin, doc.audit_end,</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>                hit.pattern, hit.section, hit.page</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>            ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="114">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>data1_onlyFS    <span class="op">=</span> data1.query(<span class="st">'section == "fs"'</span>).drop([<span class="st">'audit_begin'</span>, <span class="st">'audit_end'</span>, <span class="st">'section'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>data1_onlyaudit <span class="op">=</span> data1.query(<span class="st">'section == "audit"'</span>).drop([<span class="st">'fs_begin'</span>, <span class="st">'fs_end'</span>, <span class="st">'section'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="115">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>data1_onlyFS_noMult <span class="op">=</span> data1_onlyFS[[<span class="st">','</span> <span class="kw">not</span> <span class="kw">in</span> <span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> data1_onlyFS[<span class="st">'fs_begin'</span>]]]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>data1_onlyaudit_noMult <span class="op">=</span> data1_onlyaudit[[<span class="st">','</span> <span class="kw">not</span> <span class="kw">in</span> <span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> data1_onlyaudit[<span class="st">'audit_begin'</span>]]]</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'By restricting to no multi-start sections, we lose'</span>, </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>      <span class="bu">len</span>(data1_onlyFS)<span class="op">-</span><span class="bu">len</span>(data1_onlyFS_noMult), <span class="st">'snippets.</span><span class="ch">\n</span><span class="st">'</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">'Left:'</span>, <span class="bu">len</span>(data1_onlyFS_noMult))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>By restricting to no multi-start sections, we lose 34 snippets.
+ Left: 4178</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="116">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>data1_onlyFS_noMult[<span class="st">'location'</span>] <span class="op">=</span> [<span class="bu">int</span>(snip[<span class="st">'page'</span>]) <span class="op">/</span> <span class="bu">int</span>(snip[<span class="st">'fs_end'</span>]) <span class="cf">for</span> _,snip <span class="kw">in</span> data1_onlyFS_noMult.iterrows()]</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>data1_onlyaudit_noMult[<span class="st">'location'</span>] <span class="op">=</span> [<span class="bu">int</span>(snip[<span class="st">'page'</span>]) <span class="op">/</span> <span class="bu">int</span>(snip[<span class="st">'audit_end'</span>]) <span class="cf">for</span> _,snip <span class="kw">in</span> data1_onlyaudit_noMult.iterrows()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="124">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">3</span>, ncols<span class="op">=</span><span class="dv">1</span>, sharex<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>customprops <span class="op">=</span> <span class="bu">dict</span>(linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.boxplot(data1_onlyFS_noMult['location'], showfliers=0, showmeans=1, meanline=1, showcaps=0, </span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co">#            boxprops=customprops, whiskerprops=customprops, capprops=customprops, </span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="co">#            medianprops=dict(color='#ff1f5b'), meanprops=dict(linestyle=':', linewidth=1, color='gray'))</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n, year <span class="kw">in</span> <span class="bu">enumerate</span>([<span class="dv">2018</span>, <span class="dv">2020</span>, <span class="dv">2022</span>]):</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>    sns.stripplot(data<span class="op">=</span>data1_onlyFS_noMult.query(<span class="st">'year == @year'</span>), </span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>                  x<span class="op">=</span><span class="st">'location'</span>, y<span class="op">=</span><span class="st">'pattern'</span>, </span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>                  color<span class="op">=</span>colors[n], alpha<span class="op">=</span><span class="fl">0.4</span>, size<span class="op">=</span><span class="fl">2.5</span>, ax<span class="op">=</span>ax[n], order<span class="op">=</span>search_patterns)</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    ax[n].grid(color<span class="op">=</span><span class="st">'lightgray'</span>, axis<span class="op">=</span><span class="st">'y'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>    ax[n].set_ylabel(<span class="st">''</span>)</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>    ax[n].set_title(year)</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlim([<span class="dv">0</span>,<span class="dv">1</span>])</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_xlabel(<span class="st">''</span>)</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309282020" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309282020-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;7: Relative location</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cross-sectional-splits" class="level2">
+<h2 class="anchored" data-anchor-id="cross-sectional-splits">Cross-sectional splits</h2>
+<div class="cell" data-execution_count="651">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>snippets[snippets.document_id <span class="op">==</span> <span class="st">'f6d019db-5b4d-4b4b-b989-427262d0873b'</span>].query(<span class="st">'section == "fs"'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="651">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">document_id</th>
+<th data-quarto-table-cell-role="th">isin</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">pattern</th>
+<th data-quarto-table-cell-role="th">section</th>
+<th data-quarto-table-cell-role="th">snippet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">87779</td>
+<td>f6d019db-5b4d-4b4b-b989-427262d0873b</td>
+<td>DE000DTR0CK8</td>
+<td>2021</td>
+<td>carbon</td>
+<td>fs</td>
+<td>joint venture in january 2022, daimler truck ...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">87780</td>
+<td>f6d019db-5b4d-4b4b-b989-427262d0873b</td>
+<td>DE000DTR0CK8</td>
+<td>2021</td>
+<td>emission</td>
+<td>fs</td>
+<td>t can only remain successful over the longterm...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">87781</td>
+<td>f6d019db-5b4d-4b4b-b989-427262d0873b</td>
+<td>DE000DTR0CK8</td>
+<td>2021</td>
+<td>emission</td>
+<td>fs</td>
+<td>ainable corporate governance. this includes th...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">87782</td>
+<td>f6d019db-5b4d-4b4b-b989-427262d0873b</td>
+<td>DE000DTR0CK8</td>
+<td>2021</td>
+<td>emission</td>
+<td>fs</td>
+<td>echnology path in the future and explore the p...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">87783</td>
+<td>f6d019db-5b4d-4b4b-b989-427262d0873b</td>
+<td>DE000DTR0CK8</td>
+<td>2021</td>
+<td>emission</td>
+<td>fs</td>
+<td>orecasted planning periods as well as within c...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">87784</td>
+<td>f6d019db-5b4d-4b4b-b989-427262d0873b</td>
+<td>DE000DTR0CK8</td>
+<td>2021</td>
+<td>emission</td>
+<td>fs</td>
+<td>her european truck manufacturers for their par...</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="interactive" class="level2">
+<h2 class="anchored" data-anchor-id="interactive">Interactive</h2>
+<div class="cell" data-execution_count="608">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #| fig-cap: Average keyword hits per section over time</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax1 = plt.subplots()</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ax1.plot(years, avg_hits_perSec_perYear[0], 'o-', color='#ff1f5b', label='fs+notes')</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ax1.plot(years, avg_hits_perSec_perYear[1], 'o-', color='#009ade', label='audit')</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ax1.set_ylabel('average hits per section')</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ax1.set_xticks(years)</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ax1.legend()</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.show()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="526">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"ba3cc73379014974b51bf2d0438289f5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+</section>
+<section id="document-descriptives" class="level2">
+<h2 class="anchored" data-anchor-id="document-descriptives">Document descriptives</h2>
+<div class="cell" data-execution_count="425">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">3</span>))</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].hist(docsa[<span class="st">'n_pages'</span>], edgecolor<span class="op">=</span><span class="st">"w"</span>, bins<span class="op">=</span><span class="dv">25</span>, color<span class="op">=</span><span class="st">'#a0b1ba'</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="ss">f'Panel A. Total page numbers'</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].hist(docsa[<span class="st">'clean_text_len'</span>], edgecolor<span class="op">=</span><span class="st">"w"</span>, bins<span class="op">=</span><span class="dv">25</span>, color<span class="op">=</span><span class="st">'#a0b1ba'</span>)</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="ss">f'Panel B. Clean text lengths'</span>)</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].hist(docsa[<span class="st">'avgCleanTextPerPage'</span>], edgecolor<span class="op">=</span><span class="st">"w"</span>, bins<span class="op">=</span><span class="dv">25</span>, color<span class="op">=</span><span class="st">'#a0b1ba'</span>)</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_title(<span class="ss">f'Panel C. Clean text lengths per page'</span>)</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].text(x<span class="op">=</span><span class="dv">8400</span>, y<span class="op">=-</span><span class="dv">20</span>, s<span class="op">=</span><span class="ss">f'Cropped at 1,500'</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="ss">f"n=</span><span class="sc">{</span><span class="bu">len</span>(docsa)<span class="sc">}</span><span class="ss"> documents"</span>, y<span class="op">=</span><span class="fl">1.1</span>)</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a><span class="co">#fig.savefig('figures/fig202309272049.png', dpi=400, bbox_inches='tight')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-fig202309281148" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-fig202309281148-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;8: Document descriptives</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="576">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="577">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> sent_tokenize, word_tokenize</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> sent_tokenize(docsa.iloc[<span class="dv">0</span>][<span class="st">'fs_text'</span>])</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

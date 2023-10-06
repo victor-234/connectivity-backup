@@ -1,0 +1,92 @@
+---
+title: "Connectivity Analyses"
+author: "Müller, Ormazabal, Sellhorn, Wagner"
+date: today
+abstract: "This is the research workbook for our connectivity analyses."
+format:
+  html:
+    theme: pulse
+    embed-resources: true
+    toc-location: left
+    toc: true
+    html-math-method: katex
+    toc-title: Contents
+    page-layout: full
+    fig-width: 6
+notebook-links: false
+comments:
+  hypothesis: true
+---
+
+
+# Preface
+Nothing here, yet.
+
+
+
+# Method and Data
+
+## Method
+We downloaded 961 annual reports of EURO Stoxx 600 firms from 2018 to 2022.
+
+We then manually classified different sections of the reports:
+
+* MD&A (a.k.a. management report, Lagebericht, etc.)
+* Financial Statements and Notes
+* Auditor's Report
+
+Finally, we searched for different climate-related keywords:
+{{< embed output-analyses.ipynb#search-patterns >}}
+
+
+
+## Documents
+::: {.panel-tabset}
+### Sample selection
+We distributed the EURO Stoxx 600 firms to student assistants to extract information on the structure of annual reports.
+So far, this resulted in the following documents sample: 
+
+1. no metadata in the SRN database yet,
+2. after removing not readable pdfs,
+3. pdfs where no text was scanned, and 
+4. pdfs with too little words(documents where the average clean text characters are less than 1,500 in a document).
+{{< embed output-analyses.ipynb#tbl-documents-sample >}}
+
+
+### Descriptives
+{{< embed output-analyses.ipynb#fig-fig202309281148 >}}
+:::
+
+
+
+
+# Results
+## Keywords over time
+::: {.panel-tabset}
+### F/S + Notes, Auditor's Report
+{{< embed output-analyses.ipynb#fig-fig202309281056 >}}
+
+### All sections
+{{< embed output-analyses.ipynb#fig-fig202309271823 >}}
+
+### All sections, Average per Page
+{{< embed output-analyses.ipynb#fig-fig202309281057 >}}
+:::
+
+
+## Keyword ranking
+::: {.panel-tabset}
+### Ranking
+{{< embed output-analyses.ipynb#fig-fig202309281109 >}}
+
+### In F/S + Notes and Auditor's Report
+{{< embed output-analyses.ipynb#fig-fig202309281112 >}}
+
+### By all sections
+{{< embed output-analyses.ipynb#fig-fig202309281111 >}}
+:::
+
+
+## Relative location of keywords in F/S + Notes
+This graph shows the relative location (0%: first page, 100%: last page) in the F/S + Notes section.
+{{< embed output-analyses.ipynb#fig-fig202309282020 >}}

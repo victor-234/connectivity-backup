@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 5291f863-e03a-4543-aad3-33b7eb1cc4a9
+      url: 'https://victor-234.quarto.pub/connectivity-analyses'

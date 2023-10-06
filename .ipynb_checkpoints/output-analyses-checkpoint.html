@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Maximilian A. Müller">
+<meta name="author" content="Gaizka Ormazabal">
+<meta name="author" content="Thorsten Sellhorn">
+<meta name="author" content="Victor Wagner">
+
+<title>Connectivity Analyses</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="output-analyses_files/libs/clipboard/clipboard.min.js"></script>
+<script src="output-analyses_files/libs/quarto-html/quarto.js"></script>
+<script src="output-analyses_files/libs/quarto-html/popper.min.js"></script>
+<script src="output-analyses_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="output-analyses_files/libs/quarto-html/anchor.min.js"></script>
+<link href="output-analyses_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="output-analyses_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="output-analyses_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="output-analyses_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="output-analyses_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="output-analyses.pdf"><i class="bi bi-file-pdf"></i>Beamer</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Connectivity Analyses</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Maximilian A. Müller </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of Cologne
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Gaizka Ormazabal </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            IESE
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Thorsten Sellhorn </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            LMU Munich School of Management
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Victor Wagner </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            LMU Munich School of Management
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="technical-stuff" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Technical stuff</h1>
+<section id="getting-started" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="getting-started"><span class="header-section-number">1.1</span> Getting started</h2>
+<ul>
+<li>imports</li>
+<li>SRN data</li>
+<li>(check which firms and documents are needed and which are already here); Currently, we base our analyses on the documents that have already been manually coded (bottom-up); in the future, however, we do it top-down based on Euro Stoxx 600</li>
+<li>read in document data
+<ul>
+<li>read in manually coded documents</li>
+<li>check which have to be downloaded (b/c they are not here) and update</li>
+<li>check which have to be extracted (b/c it hasn’t been done) and update</li>
+<li>prepare for later analysis and merge with other data</li>
+</ul></li>
+</ul>
+<section id="read-in-manually-collected-startend-pages" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="read-in-manually-collected-startend-pages"><span class="header-section-number">1.1.1</span> Read in manually collected start/end pages</h3>
+<div class="alert alert-block alert-danger">
+Use the following with caution, this will download, extract and clean all documents if they are not stored locally.
+</div>
+</section>
+<section id="update-pdfs-if-not-all-are-downloaded-yet" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="update-pdfs-if-not-all-are-downloaded-yet"><span class="header-section-number">1.1.2</span> Update pdfs if not all are downloaded yet</h3>
+<p>There were 51 new downloads, 1 document could not be downloaded.</p>
+</section>
+<section id="extract-text-from-pdfs-if-not-done-so-yet" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="extract-text-from-pdfs-if-not-done-so-yet"><span class="header-section-number">1.1.3</span> Extract text from pdfs if not done so yet</h3>
+<p>We already have raw text for 961 documents, decrypting and reading 0 documents now.</p>
+<p>There are 186 documents with decryption problems and 0 documents that could not be read. This leaves us with a readable sample of 775 documents.</p>
+</section>
+<section id="clean-text-if-not-done-so-yet" class="level3" data-number="1.1.4">
+<h3 data-number="1.1.4" class="anchored" data-anchor-id="clean-text-if-not-done-so-yet"><span class="header-section-number">1.1.4</span> Clean text if not done so yet</h3>
+<p>There is already clean data for 961 documents, cleaning -186 documents.</p>
+</section>
+<section id="merge-other-data-to-documents" class="level3" data-number="1.1.5">
+<h3 data-number="1.1.5" class="anchored" data-anchor-id="merge-other-data-to-documents"><span class="header-section-number">1.1.5</span> Merge other data to documents</h3>
+</section>
+<section id="merge-manually-coded-section-data" class="level3" data-number="1.1.6">
+<h3 data-number="1.1.6" class="anchored" data-anchor-id="merge-manually-coded-section-data"><span class="header-section-number">1.1.6</span> Merge manually coded section data</h3>
+</section>
+</section>
+<section id="document-sample-selection" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="document-sample-selection"><span class="header-section-number">1.2</span> Document sample selection</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">less</th>
+<th style="text-align: right;">resulting</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">downloaded pdfs</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">961</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1. no metadata</td>
+<td style="text-align: left;">-52</td>
+<td style="text-align: right;">909</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2. not readable</td>
+<td style="text-align: left;">-168</td>
+<td style="text-align: right;">741</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3. zero text scanned</td>
+<td style="text-align: left;">-28</td>
+<td style="text-align: right;">713</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4. too little words*</td>
+<td style="text-align: left;">-102</td>
+<td style="text-align: right;">611</td>
+</tr>
+</tbody>
+</table>
+<p>This leaves us with 182 unique firms.</p>
+</section>
+<section id="keyword-search" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="keyword-search"><span class="header-section-number">1.3</span> Keyword search</h2>
+<pre><code>[{'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'y the ghg protocol standard. overall ghg emissions (scope 1 and scope 2) deriving from the groups activities came to 736,358 tons co 2eq in 2018.essilorluxotticaessilorluxottica total ghg emissions (tco2eq)736,358457,034279,324 scope 143,85019,11624,734scope 2692,508437,918254,590note: the figure for essilorluxottica is based on the combination of essilor and luxottica ghg emissions data calculated a'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'int has been estimated at 2.7million tco 2eq, across all scopes (scopes1, 23). this work has enabled the  group to: łconfirm that the groups current reference reporting scope, with a total of 752,103tco2eq, is consistent, representing  28% of the total estimated footprint (see details below); łprovide more detailed information on the largest sources  of emissions; łimprove the groups knowledge of sco'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'ted calculation methodology. the group uses the main emissions factors via the databases of the french environment  and energy management agency (www.ademe.fr). 201820172016total scope1+2 emissions (tco2eq)457,034462,618395,093 scope119,11621,05017,470gas15,15217,10213,661liquid fuel3,9643,9483,809scope2437,918441,568377,623 electricity437,918441,568377,623note: ghg emission (scope 1+ scope 2) of 201'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'almost all locations of the groups lenses business with international transportation flows. in addition, the group has expanded the scope of last miles reporting, notably for european subsidiaries. (tco2eq)201820172016total scope3 emissions associated withtransportation295,068281,988226,371 development factorsimpact related to transported  volume  reorganization  oflogistics flows290,535281,988impact'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 't emissions resulting from the onsite combustion of fossil fuels such as gas or fuel oil.  the ghg conversion factors were in accordance with the  ademe database (http:bilansges.ademe.fr): łgas: 244 gco2e/kwh lcv; łliquid fuel: 324 gco2e/kwh lcv. scope2œ this relates to indirect emissions associated with  the electricity consumption required for manufacturing and  machining lenses. the scope 2 emissi'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'site combustion of fossil fuels such as gas or fuel oil.  the ghg conversion factors were in accordance with the  ademe database (http:bilansges.ademe.fr): łgas: 244 gco2e/kwh lcv; łliquid fuel: 324 gco2e/kwh lcv. scope2œ this relates to indirect emissions associated with  the electricity consumption required for manufacturing and  machining lenses. the scope 2 emission was calculated according to th'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'tors for electricity were updated in 2015  based on figures provided by the ademe database. the conversion factors for the main countries where essilor is  a consumer of electricity are: łchina: 766 gco2e/kwh; łunited states: 522 gco2e/kwh; łfrance: 82 gco2e/kwh; łthailand: 513 gco2e/kwh; łphilippines: 481 gco2e/kwh.scope3œ this corresponds to other indirect emissions related to the transportation of'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'ed in 2015  based on figures provided by the ademe database. the conversion factors for the main countries where essilor is  a consumer of electricity are: łchina: 766 gco2e/kwh; łunited states: 522 gco2e/kwh; łfrance: 82 gco2e/kwh; łthailand: 513 gco2e/kwh; łphilippines: 481 gco2e/kwh.scope3œ this corresponds to other indirect emissions related to the transportation of lenses. for lens logistics, es'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'gures provided by the ademe database. the conversion factors for the main countries where essilor is  a consumer of electricity are: łchina: 766 gco2e/kwh; łunited states: 522 gco2e/kwh; łfrance: 82 gco2e/kwh; łthailand: 513 gco2e/kwh; łphilippines: 481 gco2e/kwh.scope3œ this corresponds to other indirect emissions related to the transportation of lenses. for lens logistics, essilor  redefined the va'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'e database. the conversion factors for the main countries where essilor is  a consumer of electricity are: łchina: 766 gco2e/kwh; łunited states: 522 gco2e/kwh; łfrance: 82 gco2e/kwh; łthailand: 513 gco2e/kwh; łphilippines: 481 gco2e/kwh.scope3œ this corresponds to other indirect emissions related to the transportation of lenses. for lens logistics, essilor  redefined the various types of transportat'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'ctors for the main countries where essilor is  a consumer of electricity are: łchina: 766 gco2e/kwh; łunited states: 522 gco2e/kwh; łfrance: 82 gco2e/kwh; łthailand: 513 gco2e/kwh; łphilippines: 481 gco2e/kwh.scope3œ this corresponds to other indirect emissions related to the transportation of lenses. for lens logistics, essilor  redefined the various types of transportation and freight in  2015 to i'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': '(ghg) emissions (scope1).4.2.5.43052principle 7principle 8energy indirect greenhouse gas (ghg) emissions (scope2). report gross location based energy indirect (scope2) ghg  emissions inmetric tons of co2 equivalent, and gross marketbased energy indirect  (scope2) ghg emissions if applicable.  report standards, methodologies,  assumptions, and/or calculation tools used.4.2.5.4 registration document ł '},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'fluxotticagroup s.p.a., asubsidiary ofthe essilorluxottica group certifications, a key part of luxotticas environmental policyluxotticas commitment to reducing energy and water consumption, waste and co2 emissions is coupled with the obtainment of the environmental management, energy, and health and safety system certifications that luxottica has strived to adopt in all of its sites and offices acros'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'e emission factors applied here  come from the dedicated ghg protocol tool for purchased  electricity (3), also made available by ghg protocol. greenhouse gas emissions201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) company'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': '201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) company car fuel is excluded from the calculation as this information is only partially available in the r eporting scope. fgas emissions are included. (1) in 2015 the quota o'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'wri), 2017. registration document ł 2018 ł essilorluxottica392social, environmental andsocietal information 2018 nonnancial statement ofluxotticagroup s.p.a., asubsidiary ofthe essilorluxottica group co2eq emissions deriving solely from the groups manufacturing activities and logistics hubs (scope 1 and scope 2) came to 160,872 tons in 2018, an increase of around 5% compared  with2017 due to the same'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'lled through a system of indicators that measure the service level on a global scale. among the initiatives to improve the sustainability of logistics, in 2017 luxottica launched a project to measure co2 emissions deriving from the transport of its products to monitor their environmental impact. the first phase of the project, carried out in 2017 and updated in 2018, quantified the emissions deriving'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': ' road transport between the distribution center and the airport. in 2018, the analysis showed an increase in co 2 emissions deriving from the replenishment flows of 8.3% from 2017, to  76,591 tons of co2eq (70,715 tons of co2eq in 2017), which reflects the increase in the volumes of eyewear shipped. routetransported volumes(% on the total)total distance traveled (km)distance traveled(% on the total)o'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'n the distribution center and the airport. in 2018, the analysis showed an increase in co 2 emissions deriving from the replenishment flows of 8.3% from 2017, to  76,591 tons of co2eq (70,715 tons of co2eq in 2017), which reflects the increase in the volumes of eyewear shipped. routetransported volumes(% on the total)total distance traveled (km)distance traveled(% on the total)overall emissions (tco2'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'co2eq in 2017), which reflects the increase in the volumes of eyewear shipped. routetransported volumes(% on the total)total distance traveled (km)distance traveled(% on the total)overall emissions (tco2e)overall emissions (a) (%on the total)2017201820172018201720182017201820172018china œ italy30%26%16,805,49519,819,96315%18%21,37418,29830%24% china œ us23%22%49,780,71635,658,94045%31%18,69817,51526%'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'ensuring direct shipment throughout the world. byanalyzing these shipments, luxottica was able to estimate the consumption of energy and the related co 2 emissions, quantified at about 14,770 tons of co2eq along more than 6billion kilometers traveled.country of destinationtransported volumes  (% on the 2018 total)total distance traveled (km)distance traveled (% on the 2018 total)overall emissions (tc'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': '2eq along more than 6billion kilometers traveled.country of destinationtransported volumes  (% on the 2018 total)total distance traveled (km)distance traveled (% on the 2018 total)overall emissions (tco2e)overall emissions(a) (% on the 2018 total)italy16%408,343,365 6%2822%france13%928,940,757 15%1791%germany7%322,432,588 5%1091%united states8%1,962,486,169 31%4,69432%great britain 7%454,468,415 7%39'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'onversion factor used for the calculation of methane gas energy consumption in kilowatt hours is 1 sm 3  10,944kwh (source: stogit converter). greenhouse gas emissions (retail)2018overall emissions (tco2eq) of which:94,035 łscope 1 (% of total emissions) (a)4.8% łscope 2 (% of total emissions) (b)95.2%(a) the source of the emission factors and for the global warming potential (gwp) is the ghg pr otoc'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'f which:638.3 łelectricity from the grid (millionskwh)501.4 łmethane gas (millionskwh)136.4 łdiesel for heating (millionskwh)0.5greenhouse gas emissions (operations and retail)2018overall emissions (tco2eq) of which:279,324 łscope 1 (% of total emissions)8.9% łscope 2 (% of total emissions)91.1%water consumption (operations and retail)2018total water consumption (millions of m3)3.1waste by type and d'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'version 4.1, world resources institute  (wri), 2015) made available by ghg protocol. the  gases included in the calculation, as specified inside  the ghg protocol tool for stationary combustion,  are co2, ch4, n2o. with reference to fluorinated  greenhouse gases (fgas), the gwp source is the  ghg protocol  global warming potential values  (fourth assessment report (ar4)). the gases  included in the c'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'version 4.1, world resources institute  (wri), 2015) made available by ghg protocol. the  gases included in the calculation, as specified inside  the ghg protocol tool for stationary combustion,  are co2, ch4, n2o. with reference to fluorinated  greenhouse gases (fgas), the gwp source is the  ghg protocol  global warming potential values  (fourth assessment report (ar4)). the gases  included in the c'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'ersion 4.8, world resources institute  (wri), 2017) made available by ghg protocol. the  gases included in the calculation, as specified inside  the ghg protocol tool from purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationba'},
+ {'pattern': 'co2',
+  'section': 'mda',
+  'snippet': 'ersion 4.8, world resources institute  (wri), 2017) made available by ghg protocol. the  gases included in the calculation, as specified inside  the ghg protocol tool from purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationba'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'sition of eyemedacquisition of persolacquisition of lenscraftersacquisition of rayban199819951999jointventure with ppg  to launch the  rst organic  photochromic lens acquisition of gentex optics (polycarbonate plastic lenses)19911995essilor and nikon decided to combine their rd capabilities in creating a joint venture acquisition of satisloh (equipment)200020082014acquisition of transitions optical and '},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'owth segment with high added value. at  the same time, essilor strengthened its positioning in very  light and unbreakable lenses with the takeover of gentex  optics in 1995, which brought it the polycarbonate lens. last  but not least, essilor, which until the mid1990s had earned most of its revenue in europe, began to create a global network. the group put down roots in china and india and also acquir'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'made of a frame with sun plano lenses (but they can be equipped also with prescription sun lenses, currently representing just a small portion of the market). plano lenses can be made of plastic, polycarbonate or glass. in 2018, the global market of sunglasses is estimated at around  400million units(1).essilorluxottica manufactures and distributes a great number of different models and brands of sungla'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': ' result of increased global demand, especially for midrange products, and the insourcing of a portion of the lenses previously sourced from other lensmakers. łin terms of materials, production of polycarbonate and  highindex lenses surged between 2017 and 2018.  thisreflected strong demand for polycarbonate lenses in  north america and for highindex lenses in asian markets. łessilor also continued to re'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'on of the lenses previously sourced from other lensmakers. łin terms of materials, production of polycarbonate and  highindex lenses surged between 2017 and 2018.  thisreflected strong demand for polycarbonate lenses in  north america and for highindex lenses in asian markets. łessilor also continued to reduce inventory levels in 2018. itmade more progress in terms of inventory days and inventory value,'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'pacity at certain facilities, in particular: łessilor plants in thailand and the philippines for producing  highindex lenses; łessilor plants in laos and dudley (united states) for  manufacturing polycarbonate lenses; łthe plants operated by essilors chinese partners in danyang, where 1.5 and 1.56 index lenses are made. the company forged ahead with the investment program initiated in 2017 to support th'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'duct end of lifepromotion of responsibleconsumption/responsible marketingeconomicdevelopmentsafe  healthyworking conditionspromotionof diversity inclusionenvironmental impact(energy efficiency, waste,carbon footprint)compliancebusiness ethicshuman rightsessilor materiality analysis sustainablesourcing:use of chemicals /raw materialextractionlocal economicimpact on suppliershuman rightsimpacts alongthe v'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ing activities, essilor strives to reduce its impacts. by continuously improving  environmental management processes, the work focuses on reducing water use, improving energy efficiency, reducing the carbon footprint and adapting to climate change; and finally,  reducing and recovering waste. see section4.2.5. 3. working with society as a leader in its sector, the group has made a commitment to introduc'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ees, as  well as the key managers in each entity of the group. ratings and recognition in 2018, essilor was listed on the following nonfinancial indices: djsi world  europe, msci world esg  world low carbon  leader, ftse4good, stoxx global esg leaders, euronext vigeo europe 120, ecpi indices, and ethibel excellence  pioneer. essilor also participates voluntarily in cdp (formerly the carbon  disclosure p'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'sg  world low carbon  leader, ftse4good, stoxx global esg leaders, euronext vigeo europe 120, ecpi indices, and ethibel excellence  pioneer. essilor also participates voluntarily in cdp (formerly the carbon  disclosure project), an international, independent nonprofit  organization that assesses companies efforts to measure and  reduce their greenhouse gas emissions and water footprint. in  2018, the cd'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 't: 1. strengthen environmental management processes. 2. reduce water consumption and guarantee supply. 3. improve the ener gy efficiency of manufacturing and transportation processes. 4. decrease the carbon footprint and adapt to climate change. 5. limit waste generation and optimize recycling. responsibility for overseeing the groups environmental impact reduction program lies with the global ehs depar'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'igin),  secondary (flows to a subsidiary, regardless of the point of  origin) and tertiary (flows to the customer, regardless of the  point of origin). see details in section4.2.5.4.4.2.5.4 a limited carbon footprintfollowing the achievements of the paris agreement and the  united nations cop23 conference, essilor signed up to the  french climate pledge in 2017, along with 91 other french  companies whi'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'e following years, to limit their impact on the climate, notably by financing energy efficiency programs, optimizing their production equipment and logistics chains, and innovating in the field of lowcarbon products and services. essilor has a clear climate strategy to not only being resilient  to climaterelated risks which is considered as one of main csr risks of the group, but also take climate actio'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 's a driver of efficiency, innovation and competitiveness. specifically, essilor manages its climate change program and associated risks through 3 main areas of actions: łmonitoring: measure the group carbon footprint and identify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce ghg emissions to contribute mitigating climate change; ładaptation: assess climate change related risks, ada'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'all indirect emissions (not included in scope2)  that occur in the value chain of the reporting company,  including both upstream and downstream emissions. in 2017, essilor performed its first global carbon assessment  of its business by taken into account all sources of emissions along its value chain (raw materials, transportation to customers, depreciation of buildings, end of product life, etc.). th'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'nt  of its business by taken into account all sources of emissions along its value chain (raw materials, transportation to customers, depreciation of buildings, end of product life, etc.). the groups carbon footprint has been estimated at 2.7million tco 2eq, across all scopes (scopes1, 23). this work has enabled the  group to: łconfirm that the groups current reference reporting scope, with a total of 7'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ledge of scope3 so as to begin  dialogue with stakeholders (transporters, suppliers, etc.); łidentify the next focus areas in terms of reporting and  mitigation; łconfirm essilors positioning as a lowcarbon company. direct and indirect greenhouse gas emissions deriving from energy consumption (scope1and2) since 2015, essilor has been working on an extended reporting scope for its greenhouse gas emission'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': ' is important to understand the global footprint of the scope 3 emissions, the group has a specific focus on the downstream transportations and distributions of the lenses,  one of the most important carbon emission sources of the  group activities. downstream transportation emissions have been split in 3 categories: łprimary transportation: flows to a distribution center or offshore prescription labora'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'd scope accounts for 1.5% of the total 2018 emissions.mitigationwhile implementing its growth strategy, the group is committed to reducing the environmental impact of its operations, particularly its carbon footprint.reducing the groups ghg emissions is also an opportunity to reduce the associated costs (energy, transportation), limit energy dependence (even if relatively moderately), anticipate the app'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ity program (see 4.2.6.3), essilor also works in partnership with its suppliers to improve the environmental profile of its products ( e.g. : using less packaging, ecodesign) to reduce the associated carbon  footprint; łthe energy used at the lens production plants and prescription laboratories.essilor has implemented an ambitious energy efficiency program named reboost energy (see 4.2.5.3) at the produ'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'urricanes and typhoons) which can cause damage to the buildings and slow down the logistics chain;in addition, fluctuating costs of energy and raw materials ( e.g.: additional taxes on fossil energy, carbon tax levy, etc.) can also cause risks and additional costs to essilors operation. essilor has defined two focus areas in response to climate change:1. managing operational risks: a major focus area, b'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ns which breaks with existing technologies and paves the way for the gradual replacement by all market players of conventional blocking systems, some of which use metal alloys; łthe compacting of polycarbonate shavings and residues from the surfacing process to reduce the weight of waste and  recover water, which is then filtered and reinjected into the  prescription laboratorys inhouse system; łpartner'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'r relevant. for example, the groups entities invest in devices to treat volatile organic compound (voc) emissions, ranging from simple onsite extractors to computercontrolled biofilters and activated carbon filters or similar registration document ł 2018 ł essilorluxottica341social, environmental andsocietal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorlu'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ssilorluxottica group the generation of energy from renewable sourcessince 2013, luxottica has been investing in manufacturing plants that run on renewable energy, with the objective of  reducing its carbon footprint across the value chain. the first one was the solar panel system in the lauriano factory. between 2014 and 2018, approximately 2,000sqm of solar  panels enabled the company to reduce emissi'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'ce on total energy consumption (italianmanufacturing sites)4.0%3.8%2.1%in 2018 luxottica activated a solar thermal plant for the production of hot water at the chinese production site. monitoring the carbon footprintone of the cornerstones of the environmental impact monitoring system is greenhouse gas emissions (ghg), which are reported on the basis of the international classification proposed by the g'},
+ {'pattern': 'carbon',
+  'section': 'mda',
+  'snippet': 'n of production processes and the increased logistic capacity abovedescribed. therefore, excluding these last impacts, the overall emissions per frame have dropped to 1.73 kgco 2eq/pz (3% from 2017). carbon footprint measurement across distributionthe entire distribution chain is managed and controlled through a system of indicators that measure the service level on a global scale. among the initiatives'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ity and to fully interact with the world around them. the committee shall notably be responsible under the authority of the board of directors for: łsustainable development matters, including notably climate change, environmental policies and management systems, human rights, social impact, safety  wellbeing, diversity  inclusion, sustainability reporting  disclosure; łethics  compliance matters, includ'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'pdated every year according to changes of reporting standards, stakeholders expectations and feedback on the previous reporting campaign. in 2018, a set of new  indicators were added on human rights, climate change and  supplier sustainability. a network of contributors across all entities of essilor from a range of disciplines (human resources, environmenthealthsafety, procurement, etc.) reports  infor'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'or luxotticas code of ethics or regulatory frameworks, or any other unethical behavior (see section4.1.3.4 œ business ethics); łbusiness interruption: the risk that business activity is  interrupted (climate change events, act of nature, lack of key natural resources, social issues, manmade hazard.) and the company is not able to serve the market in a proper  way (see section4.1.3.2 œ energy management,'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': ' change events, act of nature, lack of key natural resources, social issues, manmade hazard.) and the company is not able to serve the market in a proper  way (see section4.1.3.2 œ energy management, climate  change, water management); łsupplier sustainability: the risk that suppliers are not compliant with laws, international standards, either essilors and luxotticas code of ethics, and essilorluxottic'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': ' statements of essilor and  luxottica.4.1.3.2 environmentto mitigate the risk of business interruption due to a shortage of key resources or environmental issues such as loss of license to operate or climate change events, essilorluxottica is  committed to optimizing the use of natural resources and  reducing its environmental footprint across the value chain,  from manufacturing to distribution. among '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'and  reducing its environmental footprint across the value chain,  from manufacturing to distribution. among different  environmental related topics, reducing energy and water consumption, addressing climate change and reducing waste are at the forefront of the groups commitment and actions.  the group closely monitors its environmental footprint on different topics in order to assess the effectiveness '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'as energy consumption data collected through their respective reporting campaigns. for more information on reporting methodology and scope, please refer to the nonfinancial statement of each company. climate changeboth essilor and luxottica contribute to address climate change. as a fundamental, both companies have been extending the reporting scope for their greenhouse gas (ghg) emissions over the year'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'eporting campaigns. for more information on reporting methodology and scope, please refer to the nonfinancial statement of each company. climate changeboth essilor and luxottica contribute to address climate change. as a fundamental, both companies have been extending the reporting scope for their greenhouse gas (ghg) emissions over the years, which are reported on the basis of the international  classi'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'a, with the intent to continue strengthening compliance ( i.e. decree 20171265 on nonfinancial disclosure, duty of care on human rights, sapin ii on anticorruption and bribery, energy transition with climate change) and guarantee consistency with both essilor and luxotticas code of ethics, corporate sustainability teams of essilor and luxottica will continue working together on the following priorities:'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'mitment and vigilant approach to human  rights; łsustainable purchasing in supplier relations; łreducing water use; łenergy efficiency in production and distribution; ładapting to the consequences of climate change; ła circular economy approach to raw material optimization  and waste management; łidentification of csr risks; łmain initiatives for hr; łmain initiatives for hs; łmain initiatives for envir'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'hich directly aim to fulfil  the groups mission, lead to a greater focus on sustainable procurement and the circular economy in the wider sense (see section4.2.5.5), and highlighted two major themes: climate  change (see section4.2.5.4), and human rights (see4.2.6.2).  the group has updated the materiality matrix below based  on this information.strategic topics ł awareness  access to   quality vision c'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'tegic partnership ł innovation and rd ł human capital development    talent attraction ł water use ł sustainable procurement stakeholders perspectivebusiness impactpriority topics ł energy efciency ł climate change adaptation    mitigation ł diversity  inclusion ł responsible marketing ł resource  waste ł safety  wellbeing   customer relationship  management (crm)core topicsł stakeholder dialogueł human'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'o reduce its impacts. by continuously improving  environmental management processes, the work focuses on reducing water use, improving energy efficiency, reducing the carbon footprint and adapting to climate change; and finally,  reducing and recovering waste. see section4.2.5. 3. working with society as a leader in its sector, the group has made a commitment to introducing preventive and vigilance mech'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': ' providers (cumulative, reference year 2013) 8,96336%3invest 30million in philanthropic visualhealthprograms (reference year 2014) 49million163%optimizing environmental  footprintcontribute to tackle climate change and its impacts through sustainable management of energy and water resources 4reduce water intensity by 20% comparedto2015 baseline (b)21%107%5reduce energy intensity by 15% comparedto2015 ba'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'nd  reduce their greenhouse gas emissions and water footprint. in  2018, the cdp recognized the continuous progress essilor has been making in these areas, awarding it an a rating for its response to climate change and an a rating for water management.us magazine forbes also ranked essilor among the worlds 100 most innovative companies for the eighth year running. registration document ł 2018 ł essilorl'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'inability, the implementation of associated action plans and respond to questions from key accounts or other  stakeholders; łcoordinate several crossfunctional topics such as management of csr risks, climate change, dialog with stakeholders or  human rights; łcommunicate essilors initiatives, contribute to the public debate on sustainable development challenges and engage in dialogue with stakeholders; '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'geographic divisions to coordinate the deployment of  the groups sustainable development roadmap, report best practices and discuss crossfunctional issues ( e.g. human rights, nonfinancial reporting, climate change, etc.). the sustainable development department is also regularly consulted by the csr committee.4.2.2.3 management of csr risksessilor conducts its business in an everchanging environment and'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'eessilorluxottica group this analysis identified nine priority csr risk topics: łbusiness ethics; łsupplier relations; łhuman rights; łtalent management; łoccupational health and safety; łwater use; łclimate change; łcsr communication; łnonfinancial reporting. note: as required by law l.2251021, the themes of fighting against food waste and food poverty, means in favor of responsible, fair and sustainab'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'in 2018, to take into account essilor stakeholders expectations and to monitor the effectiveness of some of the top sustainability initiatives, a set of new indicators has been added on human rights, climate change, supplier sustainability and contribution to the group mission. scope of reporting the reference scope of reporting is all essilor entities and  subsidiaries that are within the group financi'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': ' management processes. 2. reduce water consumption and guarantee supply. 3. improve the ener gy efficiency of manufacturing and transportation processes. 4. decrease the carbon footprint and adapt to climate change. 5. limit waste generation and optimize recycling. responsibility for overseeing the groups environmental impact reduction program lies with the global ehs department. to  manage the operatio'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'intensity per good lens produced by 2020 (compared with 2015) on a scope that represents the majority of the groups energy consumption. essilor has also voluntarily contributed to the work of the cdp climate. in 2018, the group was again awarded an a rating in recognition of its efforts and continuing investments, having shown leadership in this area. direct energy consumption by primary energy source 2'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'f origin). see details in section4.2.5.4.4.2.5.4 a limited carbon footprintfollowing the achievements of the paris agreement and the  united nations cop23 conference, essilor signed up to the  french climate pledge in 2017, along with 91 other french  companies which have committed, over the following years, to limit their impact on the climate, notably by financing energy efficiency programs, optimizin'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'd nations cop23 conference, essilor signed up to the  french climate pledge in 2017, along with 91 other french  companies which have committed, over the following years, to limit their impact on the climate, notably by financing energy efficiency programs, optimizing their production equipment and logistics chains, and innovating in the field of lowcarbon products and services. essilor has a clear clim'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'imate, notably by financing energy efficiency programs, optimizing their production equipment and logistics chains, and innovating in the field of lowcarbon products and services. essilor has a clear climate strategy to not only being resilient  to climaterelated risks which is considered as one of main csr risks of the group, but also take climate actions as a driver of efficiency, innovation and compe'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'grams, optimizing their production equipment and logistics chains, and innovating in the field of lowcarbon products and services. essilor has a clear climate strategy to not only being resilient  to climaterelated risks which is considered as one of main csr risks of the group, but also take climate actions as a driver of efficiency, innovation and competitiveness. specifically, essilor manages its cli'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': ' of lowcarbon products and services. essilor has a clear climate strategy to not only being resilient  to climaterelated risks which is considered as one of main csr risks of the group, but also take climate actions as a driver of efficiency, innovation and competitiveness. specifically, essilor manages its climate change program and associated risks through 3 main areas of actions: łmonitoring: measure'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'materelated risks which is considered as one of main csr risks of the group, but also take climate actions as a driver of efficiency, innovation and competitiveness. specifically, essilor manages its climate change program and associated risks through 3 main areas of actions: łmonitoring: measure the group carbon footprint and identify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'hrough 3 main areas of actions: łmonitoring: measure the group carbon footprint and identify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce ghg emissions to contribute mitigating climate change; ładaptation: assess climate change related risks, adapt the business to climate change consequences and build business resilience. in 2018, the group has made improvements on each of the  ar'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'itoring: measure the group carbon footprint and identify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce ghg emissions to contribute mitigating climate change; ładaptation: assess climate change related risks, adapt the business to climate change consequences and build business resilience. in 2018, the group has made improvements on each of the  areas. registration document ł 2018 ł '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'tify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce ghg emissions to contribute mitigating climate change; ładaptation: assess climate change related risks, adapt the business to climate change consequences and build business resilience. in 2018, the group has made improvements on each of the  areas. registration document ł 2018 ł essilorluxottica338social, environmental andsocietal'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'tal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group monitoring the main sources ofghgemissionsknowing monitoring is the foundation of all climate change related initiatives, with the risk of incorrect or limited measurement, the group keeps improving its reporting capacity on ghg emissions, by strengthening the data collection process and by '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'the groups ghg emissions is also an opportunity to reduce the associated costs (energy, transportation), limit energy dependence (even if relatively moderately), anticipate the application of binding climate agreements (taxes, quotas) and meet the expectations of investors and financial institutions, as well as of key account customers in this area. the analysis of ghg emissions shows that there are thr'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': '4.2.5.3) at the production plants and significant laboratories. a public target has been issued to reduce energy intensity by 15% by 2020  compared with the 2015 level. adapting to the consequences ofclimatechangeessilor was one of the first signatories of the united nations caring for climate initiative in 2007, and œbeing aware from  a very early stage of the effects of climate changeœ it has graduall'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'n issued to reduce energy intensity by 15% by 2020  compared with the 2015 level. adapting to the consequences ofclimatechangeessilor was one of the first signatories of the united nations caring for climate initiative in 2007, and œbeing aware from  a very early stage of the effects of climate changeœ it has gradually included the potential natural hazards in its operations management. as such, analyzi'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ng to the consequences ofclimatechangeessilor was one of the first signatories of the united nations caring for climate initiative in 2007, and œbeing aware from  a very early stage of the effects of climate changeœ it has gradually included the potential natural hazards in its operations management. as such, analyzing the consequences of climate change on essilors operations is part of mitigating opera'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'nd œbeing aware from  a very early stage of the effects of climate changeœ it has gradually included the potential natural hazards in its operations management. as such, analyzing the consequences of climate change on essilors operations is part of mitigating operational risks at the groups manufacturing plants and those of its strategic suppliers. the group assesses these risks and integrates them into'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ses these risks and integrates them into its overall risk management strategy so that it can  seek the most appropriate solutions. in 2018, to better understand the potential physical risks linked to climate hazards and to improve group resilience to climate change consequences, essilor conducted an assessment on  physical climate risks in the long term to build its first climate  risk model and tested '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'l risk management strategy so that it can  seek the most appropriate solutions. in 2018, to better understand the potential physical risks linked to climate hazards and to improve group resilience to climate change consequences, essilor conducted an assessment on  physical climate risks in the long term to build its first climate  risk model and tested the model with a sample of 80 main sites, including'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ions. in 2018, to better understand the potential physical risks linked to climate hazards and to improve group resilience to climate change consequences, essilor conducted an assessment on  physical climate risks in the long term to build its first climate  risk model and tested the model with a sample of 80 main sites, including production plants, laboratories and distribution centers.based on the ass'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'physical risks linked to climate hazards and to improve group resilience to climate change consequences, essilor conducted an assessment on  physical climate risks in the long term to build its first climate  risk model and tested the model with a sample of 80 main sites, including production plants, laboratories and distribution centers.based on the assessment, five main climate hazards and risks have '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': ' term to build its first climate  risk model and tested the model with a sample of 80 main sites, including production plants, laboratories and distribution centers.based on the assessment, five main climate hazards and risks have been identified: łtemperature and heat waves, which can increase the  operational costs of facility management and can affect  employees well being at work; łhumidity, which c'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'and raw materials ( e.g.: additional taxes on fossil energy, carbon tax levy, etc.) can also cause risks and additional costs to essilors operation. essilor has defined two focus areas in response to climate change:1. managing operational risks: a major focus area, br oken down into three complementary components: łenvironmental audit prior to acquisition of any new business partner, to assess their exp'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': '1. managing operational risks: a major focus area, br oken down into three complementary components: łenvironmental audit prior to acquisition of any new business partner, to assess their exposure to climate change, łimprovement to the environmental management system at the plants by implementing specific action plans to ensure better prevention of and adaptation to all climatic risks.  as such, the gro'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'o assess their exposure to climate change, łimprovement to the environmental management system at the plants by implementing specific action plans to ensure better prevention of and adaptation to all climatic risks.  as such, the group pays close attention to the choice of  location for its industrial facilities, łbusiness continuity plan to ensure that production and  business activity continues, even '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ues, even in the case of a weather  event that could slow down a production plant or disrupt  the logistics chain;2. developing the product range: eye pr otection needs in response to a context where climate change may impact  the quantity or nature of harmful rays have not yet been evaluated with sufficient precision. however, the protective function of the corrective lens may be incorporated, particul'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ty risk or mandatory topic.referencepriority csr risksbusiness ethics4.2.6.1supplier relations 4.2.6.3human rights4.2.6.2talent management 4.2.4.2occupational health and safety4.2.4.1water use 4.2.5.2climate change4.2.5.4csr communication4.2.1.4nonfinancial reporting 4.2.2.4mandatory topics societal commitment to sustainable development4.2.3societal commitment to the circular economy 4.2.5.5information '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'istration document ł 2018 ł essilorluxottica353social, environmental andsocietal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group referenceclimate changesignificant greenhouse gas emissions items generated as a result of the groups activity,  particularly by the use of goods and services they provide 4.2.5.4adaptation to consequences of climat'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'climate changesignificant greenhouse gas emissions items generated as a result of the groups activity,  particularly by the use of goods and services they provide 4.2.5.4adaptation to consequences of climate change4.2.5.4reduction targets set voluntarily in the medium and long term to reduce greenhouse gas emissions andthemeans used for this purpose4.2.5.4biodiversity protection measures implemented to '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ic standardseconomic performance 2011direct economic value generated anddistributed.4.2.6.52012principle 7financial implications and otherrisks  and opportunities fortheorganizations  activities duetoclimate change.4.2.5.4indirect economic impacts 2031infrastructure investments and services supported.4.2.3, 4.2.3.1, 4.2.3.2, 4.2.3.3, 4.2.3.4 and 2017 see change report2032significant indirect economic im'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'roup took much of its inspiration from the international context, including the united nations 2030 agenda, which established the sustainable development goals (sdgs) to be met by 2030, and the paris climate change conference (cop21), which defined a global action plan to avoid dangerous climate change by limiting global warming to well below 2c. in particular, the four pillars of luxotticas vision of s'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'tions 2030 agenda, which established the sustainable development goals (sdgs) to be met by 2030, and the paris climate change conference (cop21), which defined a global action plan to avoid dangerous climate change by limiting global warming to well below 2c. in particular, the four pillars of luxotticas vision of sustainability are strictly connected to  10 out of 17 sdgs that the group contributes to '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'e wellbeing 13 talent management 14 diversity and inclusion 15 employee health and safety 16 industrial relations 17 relationship with the communities protecting the environment 18 energy efciency 19 climate change 20 water consumption 21 packaging and waste management external relevance internal relevance social impactcommitment to excellencevisual wellbeingprotecting the environment 101617182014199211'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ct łresponsible sourcing łemployee wellbeing łtalent management łdiversity and inclusion łemployee health and safety łrelationship with the communities  protecting the environment łenergy efficiency łclimate change łwater consumption łpackaging and waste management (b)  (a) the topics relating to r esponsible marketing are addressed under the eyecare and a culture of quality: at the service of customers'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'reputation of the group or the application of penalties; 3. business disruption: the risk that critical processes in the groups value chain are disrupted due to natural events,  also brought about by climate change, the unavailability ofsystems and/or individuals to carry out activities, with the consequent inability to serve target markets in the correct  manner and time frames;4. responsible managemen'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ts growth anddevelopment  strategiestalent management: łtalent  performance  management łlongterm incentives łnoncompetition agreementsprotecting the  environment material topics: łenergy efficiency łclimate change łwater consumption łpackaging and waste managementbusiness interruptionrisk of business interruption of one of luxottica main facilities, both  production or logistics, due to  natural disast'},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ers art. 3 c.2 letters a, b, c information relating to: łthe use of renewable and/or  nonrenewable energy łgreenhouse gas emissions and  air pollution łthe impact on the environmentenergy efficiency  climate change  water consumption  packaging and waste  managementprotecting the environment  commitment to excellence gri 103 (2016) management  approach disclosure for gri 302  (2016) energy consistently '},
+ {'pattern': 'climat',
+  'section': 'mda',
+  'snippet': 'ers art. 3 c.2 letters a, b, c information relating to: łthe use of renewable and/or  nonrenewable energy łgreenhouse gas emissions and  air pollution łthe impact on the environmentenergy efficiency  climate change  water consumption  packaging and waste  managementprotecting the environment  commitment to excellence gri 103 (2016) management  approach disclosure for gri 302  (2016) energy consistently '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'follows the guidelines of the global reporting initiative (gri) standards and takes into consideration the global agenda of united nations sustainable development  goals (sdgs). for indicators on ghg emissions, the group  follows the ghg protocol. for certain specific csr topics (e.g. health and safety indicators), the information reported are those that the group analyzes  and monitors in the normal cour'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'en identified to get a basic  overview of the groups impacts. the common indicators include: workforce and breakdown, employee training, employee health and safety, energy and water consumption, ghg  emissions and waste management.essilorluxottica will continue to identify meaningful kpis and start structuring a global reporting organization and it  infrastructure in the coming year. the information prese'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'of each company. climate changeboth essilor and luxottica contribute to address climate change. as a fundamental, both companies have been extending the reporting scope for their greenhouse gas (ghg) emissions over the years, which are reported on the basis of the international  classification proposed by the ghg protocol standard. overall ghg emissions (scope 1 and scope 2) deriving from the groups activ'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ng the reporting scope for their greenhouse gas (ghg) emissions over the years, which are reported on the basis of the international  classification proposed by the ghg protocol standard. overall ghg emissions (scope 1 and scope 2) deriving from the groups activities came to 736,358 tons co 2eq in 2018.essilorluxotticaessilorluxottica total ghg emissions (tco2eq)736,358457,034279,324 scope 143,85019,11624'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'n proposed by the ghg protocol standard. overall ghg emissions (scope 1 and scope 2) deriving from the groups activities came to 736,358 tons co 2eq in 2018.essilorluxotticaessilorluxottica total ghg emissions (tco2eq)736,358457,034279,324 scope 143,85019,11624,734scope 2692,508437,918254,590note: the figure for essilorluxottica is based on the combination of essilor and luxottica ghg emissions data calcu'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'a total ghg emissions (tco2eq)736,358457,034279,324 scope 143,85019,11624,734scope 2692,508437,918254,590note: the figure for essilorluxottica is based on the combination of essilor and luxottica ghg emissions data calculated according to the methodology of each company. for more information on reporting methodology and scope, please refer to the nonfinancial statement of each company. water management wa'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'er on csr subject; łworkrelated injury frequency rate and severity rate; łreduction of water intensity and linked consumptions; łreduction of energy intensity and linked consumptions; łgreenhouse gas emissions (scope 1, scope 2, scope 3); łwaste amounts; łtotal workforce and different breakdowns; łtraining hours. qualitative information (actions and results) łdeveloping inclusive business models; łraising'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'resin injection moulding.  the production plants account for the majority of direct environmental impacts due to of the chemical products and raw materials that they use, the energy they consume, the emissions they generate and the waste they produce. given the concentration of environmental impacts, essilor places the emphasis on the management of water and energy and the processing of waste, as well as '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'manufacturing units, the role of these centers is to coordinate the logistics flows between suppliers and customers. most of the impacts of these centers are therefore felt in terms of greenhouse gas emissions from transportation (air and road freight, etc.). furthermore, the high numberof employees and the nature of their activities, requires extreme vigilance in terms of occupational health  and safety;'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' centers and operational and administrative  divisions. while the social impact of these facilities is very  significant, the environmental impact is low (energy from buildings, paper, greenhouse gas emissions associated with business travel, electrical and electronic waste, etc.). (note: essilorluxottica business model and strategy are presented in chapter1 of the essilorluxottica 2018 registration docum'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'cipates voluntarily in cdp (formerly the carbon  disclosure project), an international, independent nonprofit  organization that assesses companies efforts to measure and  reduce their greenhouse gas emissions and water footprint. in  2018, the cdp recognized the continuous progress essilor has been making in these areas, awarding it an a rating for its response to climate change and an a rating for water'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'e in  energy costs and increase its ability to avoid interruptions to or restrictions on energy supply in particular business regions. lastly, energy efficiency helps to reduce direct greenhouse  gas emissions.as with water, energy efficiency initiatives are managed under the reboost program by applying a similar methodology: łenergy mapping: mapping of energy networks and  equipment that consumes energy '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'lly, essilor manages its climate change program and associated risks through 3 main areas of actions: łmonitoring: measure the group carbon footprint and identify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce ghg emissions to contribute mitigating climate change; ładaptation: assess climate change related risks, adapt the business to climate change consequences and build business res'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ange program and associated risks through 3 main areas of actions: łmonitoring: measure the group carbon footprint and identify main sources of greenhouse gas (ghg) emissions; łmitigation: reduce ghg emissions to contribute mitigating climate change; ładaptation: assess climate change related risks, adapt the business to climate change consequences and build business resilience. in 2018, the group has mad'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '8 ł essilorluxottica338social, environmental andsocietal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group monitoring the main sources ofghgemissionsknowing monitoring is the foundation of all climate change related initiatives, with the risk of incorrect or limited measurement, the group keeps improving its reporting capacity on ghg emissions, b'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'fghgemissionsknowing monitoring is the foundation of all climate change related initiatives, with the risk of incorrect or limited measurement, the group keeps improving its reporting capacity on ghg emissions, by strengthening the data collection process and by extending the reporting scope. all this work follows the greenhouse gas protocol (ghg protocol), the international set of standards for greenhous'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' this work follows the greenhouse gas protocol (ghg protocol), the international set of standards for greenhouse gas accounting. under this protocol, there are three categories: łscope 1 œ direct ghg emissions occur from sources that  are owned or controlled by the company; łscope 2 œ ghg emissions from the generation of purchased energy ( e.g.: purchased electricity) consumed by the company; łscope 3 œ a'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'andards for greenhouse gas accounting. under this protocol, there are three categories: łscope 1 œ direct ghg emissions occur from sources that  are owned or controlled by the company; łscope 2 œ ghg emissions from the generation of purchased energy ( e.g.: purchased electricity) consumed by the company; łscope 3 œ all indirect emissions (not included in scope2)  that occur in the value chain of the repor'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' sources that  are owned or controlled by the company; łscope 2 œ ghg emissions from the generation of purchased energy ( e.g.: purchased electricity) consumed by the company; łscope 3 œ all indirect emissions (not included in scope2)  that occur in the value chain of the reporting company,  including both upstream and downstream emissions. in 2017, essilor performed its first global carbon assessment  of'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'hased electricity) consumed by the company; łscope 3 œ all indirect emissions (not included in scope2)  that occur in the value chain of the reporting company,  including both upstream and downstream emissions. in 2017, essilor performed its first global carbon assessment  of its business by taken into account all sources of emissions along its value chain (raw materials, transportation to customers, depr'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' chain of the reporting company,  including both upstream and downstream emissions. in 2017, essilor performed its first global carbon assessment  of its business by taken into account all sources of emissions along its value chain (raw materials, transportation to customers, depreciation of buildings, end of product life, etc.). the groups carbon footprint has been estimated at 2.7million tco 2eq, across'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ce reporting scope, with a total of 752,103tco2eq, is consistent, representing  28% of the total estimated footprint (see details below); łprovide more detailed information on the largest sources  of emissions; łimprove the groups knowledge of scope3 so as to begin  dialogue with stakeholders (transporters, suppliers, etc.); łidentify the next focus areas in terms of reporting and  mitigation; łconfirm es'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'holders (transporters, suppliers, etc.); łidentify the next focus areas in terms of reporting and  mitigation; łconfirm essilors positioning as a lowcarbon company. direct and indirect greenhouse gas emissions deriving from energy consumption (scope1and2) since 2015, essilor has been working on an extended reporting scope for its greenhouse gas emissions, and has reviewed the  associated calculation metho'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'owcarbon company. direct and indirect greenhouse gas emissions deriving from energy consumption (scope1and2) since 2015, essilor has been working on an extended reporting scope for its greenhouse gas emissions, and has reviewed the  associated calculation methodology. the group uses the main emissions factors via the databases of the french environment  and energy management agency (www.ademe.fr). 2018201'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'on (scope1and2) since 2015, essilor has been working on an extended reporting scope for its greenhouse gas emissions, and has reviewed the  associated calculation methodology. the group uses the main emissions factors via the databases of the french environment  and energy management agency (www.ademe.fr). 201820172016total scope1+2 emissions (tco2eq)457,034462,618395,093 scope119,11621,05017,470gas15,152'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'the  associated calculation methodology. the group uses the main emissions factors via the databases of the french environment  and energy management agency (www.ademe.fr). 201820172016total scope1+2 emissions (tco2eq)457,034462,618395,093 scope119,11621,05017,470gas15,15217,10213,661liquid fuel3,9643,9483,809scope2437,918441,568377,623 electricity437,918441,568377,623note: ghg emission (scope 1+ scope 2)'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2016total scope1+2 emissions (tco2eq)457,034462,618395,093 scope119,11621,05017,470gas15,15217,10213,661liquid fuel3,9643,9483,809scope2437,918441,568377,623 electricity437,918441,568377,623note: ghg emission (scope 1+ scope 2) of 2018 has decreased by 1.2%. with the same reporting scope, the ghg emission decreased by 3%, in line with the decrease in energy consumption. the 2018 scope impact accounts for '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '13,661liquid fuel3,9643,9483,809scope2437,918441,568377,623 electricity437,918441,568377,623note: ghg emission (scope 1+ scope 2) of 2018 has decreased by 1.2%. with the same reporting scope, the ghg emission decreased by 3%, in line with the decrease in energy consumption. the 2018 scope impact accounts for 2% of the total emission of scope 1+ scope 2.201620172018377,62317,470441,56821,050462,618457,0343'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' 2) of 2018 has decreased by 1.2%. with the same reporting scope, the ghg emission decreased by 3%, in line with the decrease in energy consumption. the 2018 scope impact accounts for 2% of the total emission of scope 1+ scope 2.201620172018377,62317,470441,56821,050462,618457,034395,09315,041437,9189,45719,116scope 1scope 2variation on same scopescopeeffect registration document ł 2018 ł essilorluxottica'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ent ł 2018 ł essilorluxottica339social, environmental andsocietal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group indirect greenhouse gas emissions deriving from transportation (scope3) while it is important to understand the global footprint of the scope 3 emissions, the group has a specific focus on the downstream transportations and distribu'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ational (sas), a subsidiary oftheessilorluxottica group indirect greenhouse gas emissions deriving from transportation (scope3) while it is important to understand the global footprint of the scope 3 emissions, the group has a specific focus on the downstream transportations and distributions of the lenses,  one of the most important carbon emission sources of the  group activities. downstream transportat'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ortant to understand the global footprint of the scope 3 emissions, the group has a specific focus on the downstream transportations and distributions of the lenses,  one of the most important carbon emission sources of the  group activities. downstream transportation emissions have been split in 3 categories: łprimary transportation: flows to a distribution center or offshore prescription laboratory, reg'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'he group has a specific focus on the downstream transportations and distributions of the lenses,  one of the most important carbon emission sources of the  group activities. downstream transportation emissions have been split in 3 categories: łprimary transportation: flows to a distribution center or offshore prescription laboratory, regardless of the point of origin; łsecondary transportation: flows to a'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' scope in terms of  volume and geographical coverage, covering all three types of transportation and has been continuously integrating more subsidiaries and locations in the reporting scope. the 2018 emissions data covers 33 mass production plants, seven offshore prescription laboratories and 14 distribution centers, representing almost all locations of the groups lenses business with international transp'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ups lenses business with international transportation flows. in addition, the group has expanded the scope of last miles reporting, notably for european subsidiaries. (tco2eq)201820172016total scope3 emissions associated withtransportation295,068281,988226,371 development factorsimpact related to transported  volume  reorganization  oflogistics flows290,535281,988impact of reporting scope  expansion4,533n'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ted withtransportation295,068281,988226,371 development factorsimpact related to transported  volume  reorganization  oflogistics flows290,535281,988impact of reporting scope  expansion4,533note: ghg emission linked to logistics of 2018 has increased by 4.6%. with the same reporting scope as 2017, the ghg emission increased by 3%, mainly due to the increase of transported volume. the expanded scope accoun'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'anization  oflogistics flows290,535281,988impact of reporting scope  expansion4,533note: ghg emission linked to logistics of 2018 has increased by 4.6%. with the same reporting scope as 2017, the ghg emission increased by 3%, mainly due to the increase of transported volume. the expanded scope accounts for 1.5% of the total 2018 emissions.mitigationwhile implementing its growth strategy, the group is comm'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'as increased by 4.6%. with the same reporting scope as 2017, the ghg emission increased by 3%, mainly due to the increase of transported volume. the expanded scope accounts for 1.5% of the total 2018 emissions.mitigationwhile implementing its growth strategy, the group is committed to reducing the environmental impact of its operations, particularly its carbon footprint.reducing the groups ghg emissions i'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '18 emissions.mitigationwhile implementing its growth strategy, the group is committed to reducing the environmental impact of its operations, particularly its carbon footprint.reducing the groups ghg emissions is also an opportunity to reduce the associated costs (energy, transportation), limit energy dependence (even if relatively moderately), anticipate the application of binding climate agreements (tax'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' the application of binding climate agreements (taxes, quotas) and meet the expectations of investors and financial institutions, as well as of key account customers in this area. the analysis of ghg emissions shows that there are three main sources of emissions that are considered as priorities on mitigation projects: łtransportation between suppliers, plants, laboratories and customers.the group continu'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ', quotas) and meet the expectations of investors and financial institutions, as well as of key account customers in this area. the analysis of ghg emissions shows that there are three main sources of emissions that are considered as priorities on mitigation projects: łtransportation between suppliers, plants, laboratories and customers.the group continues to optimize its supply chain by favoring regional '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'gescale deployment.the prevention and reduction of air discharges are taken into account whenever relevant. for example, the groups entities invest in devices to treat volatile organic compound (voc) emissions, ranging from simple onsite extractors to computercontrolled biofilters and activated carbon filters or similar registration document ł 2018 ł essilorluxottica341social, environmental andsocietal in'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' ł 2018 ł essilorluxottica351social, environmental andsocietal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group method for calculating ghg emissionsin accordance with the ghg protocol, the accounting and reporting standard for greenhouse gas emissions (http:www.ghgprotocol.org ), information on ghg emissions is communicated on the basis of three'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' essilorinternational (sas), a subsidiary oftheessilorluxottica group method for calculating ghg emissionsin accordance with the ghg protocol, the accounting and reporting standard for greenhouse gas emissions (http:www.ghgprotocol.org ), information on ghg emissions is communicated on the basis of three scopes: scope 1, 2  and3.in 2018, the group continued to follow the ghg protocol standard and used the'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ttica group method for calculating ghg emissionsin accordance with the ghg protocol, the accounting and reporting standard for greenhouse gas emissions (http:www.ghgprotocol.org ), information on ghg emissions is communicated on the basis of three scopes: scope 1, 2  and3.in 2018, the group continued to follow the ghg protocol standard and used the databases of the agence franaise de  lenvironnement et de'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'llow the ghg protocol standard and used the databases of the agence franaise de  lenvironnement et de la matrise de lénergie (www.ademe. fr/) for conversion factors.scope1œ this corresponds to direct emissions resulting from the onsite combustion of fossil fuels such as gas or fuel oil.  the ghg conversion factors were in accordance with the  ademe database (http:bilansges.ademe.fr): łgas: 244 gco2e/kwh l'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'fuel oil.  the ghg conversion factors were in accordance with the  ademe database (http:bilansges.ademe.fr): łgas: 244 gco2e/kwh lcv; łliquid fuel: 324 gco2e/kwh lcv. scope2œ this relates to indirect emissions associated with  the electricity consumption required for manufacturing and  machining lenses. the scope 2 emission was calculated according to the locationbased method of the ghg protocol. the conv'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '4 gco2e/kwh lcv; łliquid fuel: 324 gco2e/kwh lcv. scope2œ this relates to indirect emissions associated with  the electricity consumption required for manufacturing and  machining lenses. the scope 2 emission was calculated according to the locationbased method of the ghg protocol. the conversion factors for electricity were updated in 2015  based on figures provided by the ademe database. the conversion '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'sumer of electricity are: łchina: 766 gco2e/kwh; łunited states: 522 gco2e/kwh; łfrance: 82 gco2e/kwh; łthailand: 513 gco2e/kwh; łphilippines: 481 gco2e/kwh.scope3œ this corresponds to other indirect emissions related to the transportation of lenses. for lens logistics, essilor  redefined the various types of transportation and freight in  2015 to include journeys between essilor sites and airports,  port'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ica353social, environmental andsocietal information 2018 nonnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group referenceclimate changesignificant greenhouse gas emissions items generated as a result of the groups activity,  particularly by the use of goods and services they provide 4.2.5.4adaptation to consequences of climate change4.2.5.4reduction targets set volunt'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'icularly by the use of goods and services they provide 4.2.5.4adaptation to consequences of climate change4.2.5.4reduction targets set voluntarily in the medium and long term to reduce greenhouse gas emissions andthemeans used for this purpose4.2.5.4biodiversity protection measures implemented to protect and conserve the biodiversity 4.2.5.1societalsocietal commitments for sustainable development impact o'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' 8water discharge 4.2.5.2biodiversity3041principle 8operational sites owned, leased, managed in, or adjacent to, protected  areas and areas of high biodiversity  value outside protected areas. 4.2.5.1emissions3051principle 7principle 8direct greenhouse gas (ghg) emissions (scope1).4.2.5.43052principle 7principle 8energy indirect greenhouse gas (ghg) emissions (scope2). report gross location based energy i'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' sites owned, leased, managed in, or adjacent to, protected  areas and areas of high biodiversity  value outside protected areas. 4.2.5.1emissions3051principle 7principle 8direct greenhouse gas (ghg) emissions (scope1).4.2.5.43052principle 7principle 8energy indirect greenhouse gas (ghg) emissions (scope2). report gross location based energy indirect (scope2) ghg  emissions inmetric tons of co2 equivalent'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'iversity  value outside protected areas. 4.2.5.1emissions3051principle 7principle 8direct greenhouse gas (ghg) emissions (scope1).4.2.5.43052principle 7principle 8energy indirect greenhouse gas (ghg) emissions (scope2). report gross location based energy indirect (scope2) ghg  emissions inmetric tons of co2 equivalent, and gross marketbased energy indirect  (scope2) ghg emissions if applicable.  report st'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ple 8direct greenhouse gas (ghg) emissions (scope1).4.2.5.43052principle 7principle 8energy indirect greenhouse gas (ghg) emissions (scope2). report gross location based energy indirect (scope2) ghg  emissions inmetric tons of co2 equivalent, and gross marketbased energy indirect  (scope2) ghg emissions if applicable.  report standards, methodologies,  assumptions, and/or calculation tools used.4.2.5.4 re'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'irect greenhouse gas (ghg) emissions (scope2). report gross location based energy indirect (scope2) ghg  emissions inmetric tons of co2 equivalent, and gross marketbased energy indirect  (scope2) ghg emissions if applicable.  report standards, methodologies,  assumptions, and/or calculation tools used.4.2.5.4 registration document ł 2018 ł essilorluxottica359social, environmental andsocietal information 2'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'nnancial statement of essilorinternational (sas), a subsidiary oftheessilorluxottica group gri standardsungc principlessdgs topicreference3053principle 7principle 8other indirect greenhouse gas (ghg) emissions (scope3).4.2.5.4effluents and waste 3061principle 8total water discharge by quality anddestination.4.2.5.23062principle 8total weight of waste by type  anddisposal method, with  thebreakdown of haza'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ogical innovations  and constant investments aimed at improving activities and processes have made the entire value chain increasingly more sustainable, in terms of water and energy consumption, co 2 emissions, management and recycling of discards and waste. from the definition and implementation of policies and initiatives aimed at reducing the main environmental impacts to investments in industrial tech'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2017, therefore excluding the central laboratories for the production of ophthalmic lenses. the environmental performance intheoperationsthe first major projects, mainly aimed at reducing atmospheric emissions, were launched in the early 2000s while in 2010 (3) luxottica adopted a health, safety, environmental and energy policy founded on four primary objectives: łprotecting the environment, preventing an'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'uxottica.com. since 2011 a structured system has been in place for monitoring environmental impacts. based on the monitoring of four  environmental macroissues (energy consumption, water consumption, emissions and waste), it is developed according to a process comprising the following phases: łmeasurement of the environmental impacts generated by the groups processes and activities through the installatio'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'otticagroup s.p.a., asubsidiary ofthe essilorluxottica group certifications, a key part of luxotticas environmental policyluxotticas commitment to reducing energy and water consumption, waste and co2 emissions is coupled with the obtainment of the environmental management, energy, and health and safety system certifications that luxottica has strived to adopt in all of its sites and offices across the wor'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ional legislation is required. this rating system promotes a wholebuilding approach to sustainability by recognizing performance in key aspects such as energy and water savings, the reduction of co 2 emissions, indoor environmental quality, materials and resources used,  construction project and choice of site. dongguan and sedico were first to receive it. the certification process is ongoing for atlanta,'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'rting with the selection of building materials. also in this case, just like the other production and  logistic sites of the group, monitoring water and energy  consumption, discharges, waste and the emission of greenhouse gases into the atmosphere follows loxotticas standards, which are more stringent than those required under local  regulations. registration document ł 2018 ł essilorluxottica390social, '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'or used to calculate diesel energy consumption for heating in kilowatt hours is 1 l  10.005kwh (sour ce: italian greenhouse gas inventory 1990 œ 2014 œ national inventory report 2016 annex 6 national emission factors œ istituto superiore per la protezione e la ricerca ambientale œ ispra). registration document ł 2018 ł essilorluxottica391social, environmental andsocietal information 2018 nonnancial statem'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'carbon footprint across the value chain. the first one was the solar panel system in the lauriano factory. between 2014 and 2018, approximately 2,000sqm of solar  panels enabled the company to reduce emissions by  approximately 80 t/co 2 per year. in 2014, the first biomass heating system was built in the cencenighe factory, which is used for heating the premises. in july 2016, the solid biomass fueled tr'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ar thermal plant for the production of hot water at the chinese production site. monitoring the carbon footprintone of the cornerstones of the environmental impact monitoring system is greenhouse gas emissions (ghg), which are reported on the basis of the international classification proposed by the ghg protocol standard and used by the global reporting initiative.with reference to scope 1 (direct greenho'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' which are reported on the basis of the international classification proposed by the ghg protocol standard and used by the global reporting initiative.with reference to scope 1 (direct greenhouse gas emissions from proprietary installations or installations controlled by the organization), the greenhouse gas emissions (in co 2eq) are calculated on the basis of the emission factors applied to methane gas a'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' used by the global reporting initiative.with reference to scope 1 (direct greenhouse gas emissions from proprietary installations or installations controlled by the organization), the greenhouse gas emissions (in co 2eq) are calculated on the basis of the emission factors applied to methane gas and heating fuel taken from the dedicated ghg protocol tool for stationary combustion (2) made available by ghg'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'o scope 1 (direct greenhouse gas emissions from proprietary installations or installations controlled by the organization), the greenhouse gas emissions (in co 2eq) are calculated on the basis of the emission factors applied to methane gas and heating fuel taken from the dedicated ghg protocol tool for stationary combustion (2) made available by ghg protocol. as for scope 2 (indirect greenhouse gas emissi'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ission factors applied to methane gas and heating fuel taken from the dedicated ghg protocol tool for stationary combustion (2) made available by ghg protocol. as for scope 2 (indirect greenhouse gas emissions deriving from electricity generation, heating, cooling and steam energy, imported and consumed within the organization), the emissions deriving from electricity  consumption are calculated using the'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ailable by ghg protocol. as for scope 2 (indirect greenhouse gas emissions deriving from electricity generation, heating, cooling and steam energy, imported and consumed within the organization), the emissions deriving from electricity  consumption are calculated using the emission factor  corresponding to the energy mix of each of the countries in  which luxottica operates. the emission factors applied h'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' deriving from electricity generation, heating, cooling and steam energy, imported and consumed within the organization), the emissions deriving from electricity  consumption are calculated using the emission factor  corresponding to the energy mix of each of the countries in  which luxottica operates. the emission factors applied here  come from the dedicated ghg protocol tool for purchased  electricity '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'rganization), the emissions deriving from electricity  consumption are calculated using the emission factor  corresponding to the energy mix of each of the countries in  which luxottica operates. the emission factors applied here  come from the dedicated ghg protocol tool for purchased  electricity (3), also made available by ghg protocol. greenhouse gas emissions201820172016overall emissions (tco2eq) of '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ountries in  which luxottica operates. the emission factors applied here  come from the dedicated ghg protocol tool for purchased  electricity (3), also made available by ghg protocol. greenhouse gas emissions201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (k'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'operates. the emission factors applied here  come from the dedicated ghg protocol tool for purchased  electricity (3), also made available by ghg protocol. greenhouse gas emissions201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'rotocol tool for purchased  electricity (3), also made available by ghg protocol. greenhouse gas emissions201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) company car fuel is excluded from the calculation as this information is o'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'also made available by ghg protocol. greenhouse gas emissions201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) company car fuel is excluded from the calculation as this information is only partially available in the r eporting sco'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'reenhouse gas emissions201820172016overall emissions (tco2eq) of which:160,872153,205138,376 scope 1 (a) (% of total emissions)12.3%12.8%13.7%scope 2 (% of total emissions)87.7%87.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) company car fuel is excluded from the calculation as this information is only partially available in the r eporting scope. fgas emissions are included. (1) i'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '.2%86.3%intensity of emissions per frame (kgco2eq/frame)1.901.791.58(a) company car fuel is excluded from the calculation as this information is only partially available in the r eporting scope. fgas emissions are included. (1) in 2015 the quota of renewable ener gy used in the italian manufacturing sites was 0.9% on total energy consumption (source: 2017 consolidated nonfinancial statement). (2) version '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2017. registration document ł 2018 ł essilorluxottica392social, environmental andsocietal information 2018 nonnancial statement ofluxotticagroup s.p.a., asubsidiary ofthe essilorluxottica group co2eq emissions deriving solely from the groups manufacturing activities and logistics hubs (scope 1 and scope 2) came to 160,872 tons in 2018, an increase of around 5% compared  with2017 due to the same factors th'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' increase of around 5% compared  with2017 due to the same factors that led to the increase in  energy consumption previously discussed. however, the breakdown shows improved trends in terms of direct emissions (scope 1), which dropped by more than one percentage point between 2016 and 2018, and by half a percentage point  from2017 to 2018, thus further confirming the efficacy of the  actions taken to supp'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'lf a percentage point  from2017 to 2018, thus further confirming the efficacy of the  actions taken to support better energy consumption  management at the plants. the greater quantities of indirect  emissions (scope2) are instead due to increased energy  consumption deriving from the internalization of production processes and the increased logistic capacity abovedescribed. therefore, excluding these las'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'due to increased energy  consumption deriving from the internalization of production processes and the increased logistic capacity abovedescribed. therefore, excluding these last impacts, the overall emissions per frame have dropped to 1.73 kgco 2eq/pz (3% from 2017). carbon footprint measurement across distributionthe entire distribution chain is managed and controlled through a system of indicators that'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' through a system of indicators that measure the service level on a global scale. among the initiatives to improve the sustainability of logistics, in 2017 luxottica launched a project to measure co2 emissions deriving from the transport of its products to monitor their environmental impact. the first phase of the project, carried out in 2017 and updated in 2018, quantified the emissions deriving from the'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ect to measure co2 emissions deriving from the transport of its products to monitor their environmental impact. the first phase of the project, carried out in 2017 and updated in 2018, quantified the emissions deriving from the transport of finished products (eyewear) among the primary distribution centers of sedico, atlanta, dongguan and jundia (mapping  the replenishment flows), thus considering both ai'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'nd jundia (mapping  the replenishment flows), thus considering both air transport  and road transport between the distribution center and the airport. in 2018, the analysis showed an increase in co 2 emissions deriving from the replenishment flows of 8.3% from 2017, to  76,591 tons of co2eq (70,715 tons of co2eq in 2017), which reflects the increase in the volumes of eyewear shipped. routetransported volu'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '715 tons of co2eq in 2017), which reflects the increase in the volumes of eyewear shipped. routetransported volumes(% on the total)total distance traveled (km)distance traveled(% on the total)overall emissions (tco2e)overall emissions (a) (%on the total)2017201820172018201720182017201820172018china œ italy30%26%16,805,49519,819,96315%18%21,37418,29830%24% china œ us23%22%49,780,71635,658,94045%31%18,69817'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '), which reflects the increase in the volumes of eyewear shipped. routetransported volumes(% on the total)total distance traveled (km)distance traveled(% on the total)overall emissions (tco2e)overall emissions (a) (%on the total)2017201820172018201720182017201820172018china œ italy30%26%16,805,49519,819,96315%18%21,37418,29830%24% china œ us23%22%49,780,71635,658,94045%31%18,69817,51526%23% italy œ us23%2'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'razil3%3%11,378,5119,603,23410%8%2,1591,9193%2% other lanes5%12%12,564,93318,819,76511%17%7,87811,92711%16% total100%100% 110,196,461113,457,301 100%100%70,71676,591100%100% (a) they are "tanktowheel emissions, i.e. emissions generated by using the vehicle. as part of the progressive broadening of the analysis scope,  the second phase of the project to quantify co 2 emissions deriving from the transport o'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '5119,603,23410%8%2,1591,9193%2% other lanes5%12%12,564,93318,819,76511%17%7,87811,92711%16% total100%100% 110,196,461113,457,301 100%100%70,71676,591100%100% (a) they are "tanktowheel emissions, i.e. emissions generated by using the vehicle. as part of the progressive broadening of the analysis scope,  the second phase of the project to quantify co 2 emissions deriving from the transport of finished produ'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '100% (a) they are "tanktowheel emissions, i.e. emissions generated by using the vehicle. as part of the progressive broadening of the analysis scope,  the second phase of the project to quantify co 2 emissions deriving from the transport of finished products (eyewear)  considers all the distribution channels used to reach the end consumers (wholesale, retail, ecommerce). for these shipping and transport s'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ub level 2 log. provider regional hub log. provider as a consequence, the scope of the analysis covers the entire flow, from the distribution hub of origin to the customers destination, including the emissions generated by all the means of transport used along route. the first map of these shipments was launched in 2018, starting from the sedico hub, as this is the main logistics center of luxotticas dist'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'es customized services, such as rayban remix, ensuring direct shipment throughout the world. byanalyzing these shipments, luxottica was able to estimate the consumption of energy and the related co 2 emissions, quantified at about 14,770 tons of co2eq along more than 6billion kilometers traveled.country of destinationtransported volumes  (% on the 2018 total)total distance traveled (km)distance traveled ('},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '0 tons of co2eq along more than 6billion kilometers traveled.country of destinationtransported volumes  (% on the 2018 total)total distance traveled (km)distance traveled (% on the 2018 total)overall emissions (tco2e)overall emissions(a) (% on the 2018 total)italy16%408,343,365 6%2822%france13%928,940,757 15%1791%germany7%322,432,588 5%1091%united states8%1,962,486,169 31%4,69432%great britain 7%454,468,4'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'e than 6billion kilometers traveled.country of destinationtransported volumes  (% on the 2018 total)total distance traveled (km)distance traveled (% on the 2018 total)overall emissions (tco2e)overall emissions(a) (% on the 2018 total)italy16%408,343,365 6%2822%france13%928,940,757 15%1791%germany7%322,432,588 5%1091%united states8%1,962,486,169 31%4,69432%great britain 7%454,468,415 7%3973%spain7%701,896,'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'tates8%1,962,486,169 31%4,69432%great britain 7%454,468,415 7%3973%spain7%701,896,110 11%1941%other countries42%1,608,418,562 25%8,91460%total100%6,386,985,966 100%14,770100%(a) they are "tanktowheel emissions, i.e. emissions generated by using the vehicle. the scope of the mapping and analysis is currently being extended to calculate the emissions deriving from the shipments and transportation from the o'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ',169 31%4,69432%great britain 7%454,468,415 7%3973%spain7%701,896,110 11%1941%other countries42%1,608,418,562 25%8,91460%total100%6,386,985,966 100%14,770100%(a) they are "tanktowheel emissions, i.e. emissions generated by using the vehicle. the scope of the mapping and analysis is currently being extended to calculate the emissions deriving from the shipments and transportation from the other distributio'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'l100%6,386,985,966 100%14,770100%(a) they are "tanktowheel emissions, i.e. emissions generated by using the vehicle. the scope of the mapping and analysis is currently being extended to calculate the emissions deriving from the shipments and transportation from the other distribution hubs of the group to the end customers. registration document ł 2018 ł essilorluxottica394social, environmental andsocietal'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ore, this report considers the 4,274 stores, equal to 60% of those directly operated by the group, whose energy  consumption (electricity and heating consumptions), direct and indirect greenhouse gas emissions (scope1 and scope2) and water consumption have been analyzed.information on waste generation were not available. registration document ł 2018 ł essilorluxottica396social, environmental andsocietal i'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' a basis for estimating consumption. the conversion factor used for the calculation of methane gas energy consumption in kilowatt hours is 1 sm 3  10,944kwh (source: stogit converter). greenhouse gas emissions (retail)2018overall emissions (tco2eq) of which:94,035 łscope 1 (% of total emissions) (a)4.8% łscope 2 (% of total emissions) (b)95.2%(a) the source of the emission factors and for the global warmi'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'ption. the conversion factor used for the calculation of methane gas energy consumption in kilowatt hours is 1 sm 3  10,944kwh (source: stogit converter). greenhouse gas emissions (retail)2018overall emissions (tco2eq) of which:94,035 łscope 1 (% of total emissions) (a)4.8% łscope 2 (% of total emissions) (b)95.2%(a) the source of the emission factors and for the global warming potential (gwp) is the ghg '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': " methane gas energy consumption in kilowatt hours is 1 sm 3  10,944kwh (source: stogit converter). greenhouse gas emissions (retail)2018overall emissions (tco2eq) of which:94,035 łscope 1 (% of total emissions) (a)4.8% łscope 2 (% of total emissions) (b)95.2%(a) the source of the emission factors and for the global warming potential (gwp) is the ghg pr otocol's tool for stationary combustion (version 4.1,"},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': "att hours is 1 sm 3  10,944kwh (source: stogit converter). greenhouse gas emissions (retail)2018overall emissions (tco2eq) of which:94,035 łscope 1 (% of total emissions) (a)4.8% łscope 2 (% of total emissions) (b)95.2%(a) the source of the emission factors and for the global warming potential (gwp) is the ghg pr otocol's tool for stationary combustion (version 4.1, world resources institute (wri), 2015),"},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': "togit converter). greenhouse gas emissions (retail)2018overall emissions (tco2eq) of which:94,035 łscope 1 (% of total emissions) (a)4.8% łscope 2 (% of total emissions) (b)95.2%(a) the source of the emission factors and for the global warming potential (gwp) is the ghg pr otocol's tool for stationary combustion (version 4.1, world resources institute (wri), 2015), made available by the ghg protocol. with"},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'd for the global warming potential (gwp) is the ghg pr otocol\'s tool for stationary combustion (version 4.1, world resources institute (wri), 2015), made available by the ghg protocol. with regard to emissions from refrigerant gases (fgas), the source of global warming potential (gwp) is the "ghg protocol œ global warming  potential values" (fifth assessment report (ar5)). (b) the source of the emission f'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'o emissions from refrigerant gases (fgas), the source of global warming potential (gwp) is the "ghg protocol œ global warming  potential values" (fifth assessment report (ar5)). (b) the source of the emission factors and for the global warming potential (gwp) is the ghg pr otocol tool from purchased electricity (version 4.8, world resources institute (wri), 2017), made available by the ghg protocol. water'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'erations and retail)2018total consumption (millionskwh) of which:638.3 łelectricity from the grid (millionskwh)501.4 łmethane gas (millionskwh)136.4 łdiesel for heating (millionskwh)0.5greenhouse gas emissions (operations and retail)2018overall emissions (tco2eq) of which:279,324 łscope 1 (% of total emissions)8.9% łscope 2 (% of total emissions)91.1%water consumption (operations and retail)2018total wate'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'llionskwh) of which:638.3 łelectricity from the grid (millionskwh)501.4 łmethane gas (millionskwh)136.4 łdiesel for heating (millionskwh)0.5greenhouse gas emissions (operations and retail)2018overall emissions (tco2eq) of which:279,324 łscope 1 (% of total emissions)8.9% łscope 2 (% of total emissions)91.1%water consumption (operations and retail)2018total water consumption (millions of m3)3.1waste by typ'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'lionskwh)501.4 łmethane gas (millionskwh)136.4 łdiesel for heating (millionskwh)0.5greenhouse gas emissions (operations and retail)2018overall emissions (tco2eq) of which:279,324 łscope 1 (% of total emissions)8.9% łscope 2 (% of total emissions)91.1%water consumption (operations and retail)2018total water consumption (millions of m3)3.1waste by type and disposal method (operations)2018total waste (tons) '},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'skwh)136.4 łdiesel for heating (millionskwh)0.5greenhouse gas emissions (operations and retail)2018overall emissions (tco2eq) of which:279,324 łscope 1 (% of total emissions)8.9% łscope 2 (% of total emissions)91.1%water consumption (operations and retail)2018total water consumption (millions of m3)3.1waste by type and disposal method (operations)2018total waste (tons) of which:50,060nonhazardous waste 29'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'dicators art. 3 c.1 letter c the principal risks art. 3 c.1 environmental matters art. 3 c.2 letters a, b, c information relating to: łthe use of renewable and/or  nonrenewable energy łgreenhouse gas emissions and  air pollution łthe impact on the environmentenergy efficiency  climate change  water consumption  packaging and waste  managementprotecting the environment  commitment to excellence gri 103 (20'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' this report considers the  4,274stores, equal to 60% of the those directly operated by  thegroup, whose energy consumption (electricity and heating  consumptions), direct and indirect greenhouse gas emissions  (scope 1 and 2) and water consumption have been analyzed. the selection of stores analyzed was due to the variety of  characteristics of the stores, such as: łdifferent formats (free standing store'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2017, 2018gri 103 (2016) management  approach disclosure for gri 303  (2016) water 3031 water withdrawal by  source 2016,  2017, 2018gri 103 (2016) management  approach disclosure for gri 305  (2016) emissions3051 direct (scope 1) ghg  emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool for stationary  combustion (version 4.1, world resources institute  (wri), 2015'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' approach disclosure for gri 303  (2016) water 3031 water withdrawal by  source 2016,  2017, 2018gri 103 (2016) management  approach disclosure for gri 305  (2016) emissions3051 direct (scope 1) ghg  emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool for stationary  combustion (version 4.1, world resources institute  (wri), 2015) made available by ghg protocol. th'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'i 303  (2016) water 3031 water withdrawal by  source 2016,  2017, 2018gri 103 (2016) management  approach disclosure for gri 305  (2016) emissions3051 direct (scope 1) ghg  emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool for stationary  combustion (version 4.1, world resources institute  (wri), 2015) made available by ghg protocol. the  gases included in the ca'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'dicators art. 3 c.1 letter c the principal risks art. 3 c.1 environmental matters art. 3 c.2 letters a, b, c information relating to: łthe use of renewable and/or  nonrenewable energy łgreenhouse gas emissions and  air pollution łthe impact on the environmentenergy efficiency  climate change  water consumption  packaging and waste  managementprotecting the environment  commitment to excellence gri 103 (20'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' this report considers the  4,274stores, equal to 60% of the those directly operated by  thegroup, whose energy consumption (electricity and heating  consumptions), direct and indirect greenhouse gas emissions  (scope 1 and 2) and water consumption have been analyzed. the selection of stores analyzed was due to the variety of  characteristics of the stores, such as: łdifferent formats (free standing store'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2017, 2018gri 103 (2016) management  approach disclosure for gri 303  (2016) water 3031 water withdrawal by  source 2016,  2017, 2018gri 103 (2016) management  approach disclosure for gri 305  (2016) emissions3051 direct (scope 1) ghg  emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool for stationary  combustion (version 4.1, world resources institute  (wri), 2015'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': ' approach disclosure for gri 303  (2016) water 3031 water withdrawal by  source 2016,  2017, 2018gri 103 (2016) management  approach disclosure for gri 305  (2016) emissions3051 direct (scope 1) ghg  emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool for stationary  combustion (version 4.1, world resources institute  (wri), 2015) made available by ghg protocol. th'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'i 303  (2016) water 3031 water withdrawal by  source 2016,  2017, 2018gri 103 (2016) management  approach disclosure for gri 305  (2016) emissions3051 direct (scope 1) ghg  emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool for stationary  combustion (version 4.1, world resources institute  (wri), 2015) made available by ghg protocol. the  gases included in the ca'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2016material topicsreference to the nonfinancial statement orother documentgri standard  and disclosurenotes on methodologyreporting yearsomissions / notes on scope3052 energy indirect (scope 2)  ghg emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool from purchased  electricity (version 4.8, world resources institute  (wri), 2017) made available by ghg protocol. t'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'e to the nonfinancial statement orother documentgri standard  and disclosurenotes on methodologyreporting yearsomissions / notes on scope3052 energy indirect (scope 2)  ghg emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool from purchased  electricity (version 4.8, world resources institute  (wri), 2017) made available by ghg protocol. the  gases included in the c'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'itute  (wri), 2017) made available by ghg protocol. the  gases included in the calculation, as specified inside  the ghg protocol tool from purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationbased method is consistent with the  ma'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'n the calculation, as specified inside  the ghg protocol tool from purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationbased method is consistent with the  marketbased method.2016, 2017,  2018gri 103 (2016) management  approach dis'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationbased method is consistent with the  marketbased method.2016, 2017,  2018gri 103 (2016) management  approach disclosure for gri 306  effluents and waste 3062 waste by type and dis'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': '2016material topicsreference to the nonfinancial statement orother documentgri standard  and disclosurenotes on methodologyreporting yearsomissions / notes on scope3052 energy indirect (scope 2)  ghg emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool from purchased  electricity (version 4.8, world resources institute  (wri), 2017) made available by ghg protocol. t'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'e to the nonfinancial statement orother documentgri standard  and disclosurenotes on methodologyreporting yearsomissions / notes on scope3052 energy indirect (scope 2)  ghg emissionsthe source of gwp emission factors that have been  applied is the ghg protocol tool from purchased  electricity (version 4.8, world resources institute  (wri), 2017) made available by ghg protocol. the  gases included in the c'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'itute  (wri), 2017) made available by ghg protocol. the  gases included in the calculation, as specified inside  the ghg protocol tool from purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationbased method is consistent with the  ma'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'n the calculation, as specified inside  the ghg protocol tool from purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationbased method is consistent with the  marketbased method.2016, 2017,  2018gri 103 (2016) management  approach dis'},
+ {'pattern': 'emission',
+  'section': 'mda',
+  'snippet': 'purchased electricity,  are co2, ch4, n2o. the ghg protocol emission  factors have been used as a proxy to quantify the  scope 2 ghg emissions under the marketbase  method. the calculation of scope 2 emissions under  the locationbased method is consistent with the  marketbased method.2016, 2017,  2018gri 103 (2016) management  approach disclosure for gri 306  effluents and waste 3062 waste by type and dis'},
+ {'pattern': 'physical risk',
+  'section': 'mda',
+  'snippet': 'uppliers. the group assesses these risks and integrates them into its overall risk management strategy so that it can  seek the most appropriate solutions. in 2018, to better understand the potential physical risks linked to climate hazards and to improve group resilience to climate change consequences, essilor conducted an assessment on  physical climate risks in the long term to build its first climate  risk'}]</code></pre>
+</section>
+</section>
+<section id="analyses" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Analyses</h1>
+<section id="sample-and-method" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sample-and-method"><span class="header-section-number">2.1</span> Sample and method</h2>
+<ul>
+<li>We downloaded 961 annual reports from Euro Stoxx 600 firms in pdf format</li>
+<li>After cleaning (see more <a href="#sec-doc-sample">Section&nbsp;2.5</a>), we were able to extract text from 611 documents</li>
+<li>We then manually classified different sections of these reports
+<ul>
+<li>MD&amp;A (a.k.a. management report, Lagebericht, etc.)</li>
+<li>Financial Statements and Notes</li>
+<li>Auditor’s Report</li>
+</ul></li>
+<li>And searched for climate-related keywords: <code>co2</code>, <code>carbon</code>, <code>climat</code>, <code>ghg</code>, <code>emission</code>, <code>regulatory risk</code>, <code>physical risk</code>, <code>transition risk</code></li>
+</ul>
+</section>
+<section id="keywords-over-time" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="keywords-over-time"><span class="header-section-number">2.2</span> Keywords over time</h2>
+<div id="fig-keywords-over-time" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-keywords-over-time-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Average keyword hits</figcaption>
+</figure>
+</div>
+<div id="fig-keywords-over-time2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="output-analyses_files/figure-html/fig-keywords-over-time2-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Average keyword hits</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/fig202309271823.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<figcaption class="figure-caption">Average keyword hits per year</figcaption>
+</figure>
+</div>
+</section>
+<section id="keyword-distribution-in-the-reports" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="keyword-distribution-in-the-reports"><span class="header-section-number">2.3</span> Keyword distribution in the reports</h2>
+<p><img src="output-analyses_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</section>
+<section id="keyword-ranking" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="keyword-ranking"><span class="header-section-number">2.4</span> Keyword ranking</h2>
+</section>
+<section id="sec-doc-sample" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-doc-sample"><span class="header-section-number">2.5</span> Document sample selection</h2>
+<p>We distributed the EURO Stoxx 600 firms to student assistants to extract information on the structure of annual reports. So far, this resulted in the following documents sample: 1. no metadata in the SRN database yet, 1. after removing not readable pdfs, 2. pdfs where no text was scanned, and 3. pdfs with too little words[^1 documents where the average clean text characters are less than 1,500 in a document].</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">less</th>
+<th style="text-align: right;">resulting</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">downloaded pdfs</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">961</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1. no metadata</td>
+<td style="text-align: left;">-52</td>
+<td style="text-align: right;">909</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2. not readable</td>
+<td style="text-align: left;">-168</td>
+<td style="text-align: right;">741</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3. zero text scanned</td>
+<td style="text-align: left;">-28</td>
+<td style="text-align: right;">713</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4. too little words*</td>
+<td style="text-align: left;">-102</td>
+<td style="text-align: right;">611</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="document-descriptives" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="document-descriptives"><span class="header-section-number">2.6</span> Document descriptives</h2>
+<p><img src="output-analyses_files/figure-html/cell-71-output-1.png" class="img-fluid"></p>
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg ansi-bold">Signature:</span> findSections<span class="ansi-yellow-fg ansi-bold">(</span>docs<span class="ansi-yellow-fg ansi-bold">)</span>
+<span class="ansi-red-fg ansi-bold">Docstring:</span> &lt;no docstring&gt;
+<span class="ansi-red-fg ansi-bold">File:</span>      c:\users\victor.wagner\google drive\phd\2 - projects\09 - connectivity\jupyter-analyses\findsections.py
+<span class="ansi-red-fg ansi-bold">Type:</span>      function
+</pre>
+</div>
+<p><img src="output-analyses_files/figure-html/cell-81-output-1.png" class="img-fluid"></p>
+<p><img src="output-analyses_files/figure-html/cell-83-output-1.png" class="img-fluid"></p>
+<p><img src="output-analyses_files/figure-html/cell-85-output-1.png" class="img-fluid"></p>
+<pre><code>error: unpack requires a buffer of 1 bytes</code></pre>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
