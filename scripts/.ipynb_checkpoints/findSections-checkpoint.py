@@ -24,9 +24,15 @@ def mergePages(raw_text, start, end):
 def mergeOtherPages(doc):
     out = ""
     out_dict = {}
-    if True not in [(',' in str(x)) for x in np.array([doc.mda_begin, doc.mda_end, doc.fs_begin, doc.fs_end, doc.audit_begin, doc.audit_end])]:
+#     if True not in [(',' in str(x)) for x in np.array([doc.mda_begin, doc.mda_end, doc.fs_begin, doc.fs_end, doc.audit_begin, doc.audit_end])]:
+#         for page in doc.clean_text_dict.keys():
+#             if (int(page) not in range(int(doc.mda_begin), int(doc.mda_end)+1)) & (int(page) not in range(int(doc.fs_begin), int(doc.fs_end)+1)) & (int(page) not in range(int(doc.audit_begin), int(doc.audit_end)+1)):
+#                 out += doc.clean_text_dict[page] + " "
+#                 out_dict[page] = doc.clean_text_dict[page]
+                
+    if True not in [(',' in str(x)) for x in np.array([doc.fs_begin, doc.fs_end, doc.audit_begin, doc.audit_end])]:
         for page in doc.clean_text_dict.keys():
-            if (int(page) not in range(int(doc.mda_begin), int(doc.mda_end)+1)) & (int(page) not in range(int(doc.fs_begin), int(doc.fs_end)+1)) & (int(page) not in range(int(doc.audit_begin), int(doc.audit_end)+1)):
+            if (int(page) not in range(int(doc.fs_begin), int(doc.fs_end)+1)) & (int(page) not in range(int(doc.audit_begin), int(doc.audit_end)+1)):
                 out += doc.clean_text_dict[page] + " "
                 out_dict[page] = doc.clean_text_dict[page]
                 
@@ -34,7 +40,8 @@ def mergeOtherPages(doc):
         all_pages = set(range(1,int(doc.n_pages)))
         excl_pages = []
         
-        pages = [(doc.mda_begin, doc.mda_end), (doc.fs_begin, doc.fs_end), (doc.audit_begin, doc.audit_end)]
+#         pages = [(doc.mda_begin, doc.mda_end), (doc.fs_begin, doc.fs_end), (doc.audit_begin, doc.audit_end)]
+        pages = [(doc.fs_begin, doc.fs_end), (doc.audit_begin, doc.audit_end)]
         for elem in pages:
             if ("," not in str(elem[0])):
                 excl_pages.append(elem)
@@ -62,11 +69,11 @@ def findSections(docs):
     
     """
     
-    unzipped_mda                = [mergePages(r,s,e) for r,s,e in zip(docs.clean_text_dict, docs.mda_begin, docs.mda_end)]
-    threelists_mda              = [[i for i,j,k in unzipped_mda], [j for i,j,k in unzipped_mda], [k for i,j,k in unzipped_mda]]
-    docs.loc[:, 'mda_text']     = threelists_mda[0]
-    docs.loc[:, 'mda_text_dict']= threelists_mda[1]
-    docs.loc[:, 'mda_length']   = threelists_mda[2]
+#     unzipped_mda                = [mergePages(r,s,e) for r,s,e in zip(docs.clean_text_dict, docs.mda_begin, docs.mda_end)]
+#     threelists_mda              = [[i for i,j,k in unzipped_mda], [j for i,j,k in unzipped_mda], [k for i,j,k in unzipped_mda]]
+#     docs.loc[:, 'mda_text']     = threelists_mda[0]
+#     docs.loc[:, 'mda_text_dict']= threelists_mda[1]
+#     docs.loc[:, 'mda_length']   = threelists_mda[2]
 
     unzipped_fs                 = [mergePages(r,s,e) for r,s,e in zip(docs.clean_text_dict, docs.fs_begin, docs.fs_end)]
     threelists_fs               = [[i for i,j,k in unzipped_fs], [j for i,j,k in unzipped_fs], [k for i,j,k in unzipped_fs]]

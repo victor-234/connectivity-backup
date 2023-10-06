@@ -19,19 +19,14 @@ comments:
 ---
 
 
-# Preface
-Nothing here, yet.
-
-
 
 # Method and Data
 
 ## Method
-We downloaded 961 annual reports of EURO Stoxx 600 firms from 2018 to 2022.
+We analyzed 1,447 annual reports of EURO Stoxx 600 firms from 2018 to 2022.
 
 We then manually classified different sections of the reports:
 
-* MD&A (a.k.a. management report, Lagebericht, etc.)
 * Financial Statements and Notes
 * Auditor's Report
 
@@ -46,10 +41,9 @@ Finally, we searched for different climate-related keywords:
 We distributed the EURO Stoxx 600 firms to student assistants to extract information on the structure of annual reports.
 So far, this resulted in the following documents sample: 
 
-1. no metadata in the SRN database yet,
-2. after removing not readable pdfs,
-3. pdfs where no text was scanned, and 
-4. pdfs with too little words(documents where the average clean text characters are less than 1,500 in a document).
+1. after removing not readable pdfs (which is probably to sracping problems that can be fixed manually),
+2. pdfs where no text was scanned, and 
+3. pdfs with too little words(documents where the average clean text characters are less than 1,500 in a document).
 {{< embed output-analyses.ipynb#tbl-documents-sample >}}
 
 
@@ -61,17 +55,76 @@ So far, this resulted in the following documents sample:
 
 
 # Results
-## Keywords over time
+
+## Keywords over time (1)
 ::: {.panel-tabset}
-### F/S + Notes, Auditor's Report
+### FS+Notes and Audit
+{{< embed output-analyses.ipynb#fig-fig202310061330 >}}
+
+### FS+Notes and Audit (no hits at all)
+{{< embed output-analyses.ipynb#fig-fig202310061332 >}}
+
+### By keyword
+{{< embed output-analyses.ipynb#fig-fig202310061333 >}}
+:::
+
+
+## Keywords over time (2)
+::: {.panel-tabset}
+### FS+Notes and Audit
 {{< embed output-analyses.ipynb#fig-fig202309281056 >}}
 
-### All sections
+### FS+Notes and Audit
+{{< embed output-analyses.ipynb#fig-fig202310061312 >}}
+
+### FS+Notes and Audit (per Page)
+{{< embed output-analyses.ipynb#fig-fig202310061313 >}}
+
+### Full AR
 {{< embed output-analyses.ipynb#fig-fig202309271823 >}}
 
-### All sections, Average per Page
+### Full AR (per Page)
 {{< embed output-analyses.ipynb#fig-fig202309281057 >}}
 :::
+
+
+## Climate alignment
+::: {.panel-tabset}
+### By ETS participation
+{{< embed output-analyses.ipynb#fig-fig202310061334 >}}
+
+### By MSCI Climate Exposure Score
+{{< embed output-analyses.ipynb#fig-fig202310061335 >}}
+
+### By MSCI Climate Exposure Score Quartiles
+{{< embed output-analyses.ipynb#fig-fig202310061336 >}}
+
+### By MSCI Climate Exposure Score Quartiles over time
+{{< embed output-analyses.ipynb#fig-fig202310061337 >}}
+:::
+
+
+## Climate connectivity
+::: {.panel-tabset}
+### By MSCI Emission Disclosure Scores
+{{< embed output-analyses.ipynb#fig-fig202310061338 >}}
+
+### By MSCI Emission Disclosure Scores by keyword
+{{< embed output-analyses.ipynb#fig-fig202310061339 >}}
+
+### By Keyword Hits outside of FS and Audit
+{{< embed output-analyses.ipynb#fig-fig202310061340 >}}
+
+### By SRN ESRS Readiness
+{{< embed output-analyses.ipynb#fig-fig202310061341 >}}
+:::
+
+
+
+
+## Relative location of keywords in FS+Notes
+This graph shows the relative location (0%: first page, 100%: last page) in the F/S + Notes section.
+{{< embed output-analyses.ipynb#fig-fig202309282020 >}}
 
 
 ## Keyword ranking
@@ -79,14 +132,9 @@ So far, this resulted in the following documents sample:
 ### Ranking
 {{< embed output-analyses.ipynb#fig-fig202309281109 >}}
 
-### In F/S + Notes and Auditor's Report
+### In FS+Notes and Audit
 {{< embed output-analyses.ipynb#fig-fig202309281112 >}}
 
-### By all sections
+### Full AR
 {{< embed output-analyses.ipynb#fig-fig202309281111 >}}
 :::
-
-
-## Relative location of keywords in F/S + Notes
-This graph shows the relative location (0%: first page, 100%: last page) in the F/S + Notes section.
-{{< embed output-analyses.ipynb#fig-fig202309282020 >}}

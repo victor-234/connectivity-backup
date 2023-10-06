@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://victor-234.quarto.pub/connectivity-analyses/output-analyses.html</loc>
-    <lastmod>2023-09-29T07:18:46.323Z</lastmod>
+    <loc>https://victor-234.quarto.pub/connectivity-analyses/readme.html</loc>
+    <lastmod>2023-10-06T11:42:54.216Z</lastmod>
   </url>
   <url>
     <loc>https://victor-234.quarto.pub/connectivity-analyses/index.html</loc>
-    <lastmod>2023-09-29T07:18:44.880Z</lastmod>
+    <lastmod>2023-10-06T11:42:51.806Z</lastmod>
+  </url>
+  <url>
+    <loc>https://victor-234.quarto.pub/connectivity-analyses/output-analyses.html</loc>
+    <lastmod>2023-10-06T11:42:53.584Z</lastmod>
   </url>
 </urlset>
